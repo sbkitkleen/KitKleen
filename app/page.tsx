@@ -7,7 +7,7 @@ export default function Home(){
   <section className="home-hero"><div className="shell home-hero-grid">
     <div className="home-hero-copy"><div className="kicker">Professional Sports Gear Care</div><h1>CLEAN GEAR.<br/><em>READY TO PERFORM.</em></h1>
     <p>Professional cleaning, sanitisation and care for cricket and sports equipment — helping your gear stay fresh, comfortable and ready for the next session.</p>
-    <div className="actions"><Link href="/contact" className="btn btn-primary">Book a Cleaning <span aria-hidden="true">↗</span></Link><Link href="#what-we-clean" className="btn btn-secondary">Explore Services</Link></div>
+    <div className="actions"><Link href="/booking" className="btn btn-primary">Book a Cleaning <span aria-hidden="true">↗</span></Link><Link href="#what-we-clean" className="btn btn-secondary">Explore Services</Link></div>
     <ul className="hero-value-points"><li>Better Performance</li><li>Safer for You & Family</li><li>No Itchiness & Irritation</li><li>Longer Gear Life</li></ul></div>
    <div className="gear-stage" aria-label="KitKleen sports equipment care packages">
     <div className="stage-lines" aria-hidden="true"/><div className="stage-stamp">MATCH<br/>READY<span> / 01</span></div>
