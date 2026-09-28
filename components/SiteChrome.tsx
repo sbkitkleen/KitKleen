@@ -12,6 +12,7 @@ export function SiteHeader() {
   const path = usePathname();
   const {count} = useCart();
   const [open,setOpen] = useState(false);
+  if(path==="/admin"||path.startsWith("/admin/bookings/")) return null;
   return <>
     <header className="header"><div className="shell header-inner">
       <Link href="/" className="brand-link" onClick={()=>setOpen(false)}>
