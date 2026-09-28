@@ -1,0 +1,7 @@
+import Link from "next/link";
+const plans=[["Player Care","For individual players","Planned recurring care for regularly used gear.","Coming soon"],["Pro Player","For players with a complete kit","Priority care, recurring kit cleaning and member benefits.","Coming soon"],["Club & Academy","For teams and academies","A scalable care plan for multiple players and shared equipment.","Talk to us"]];
+export default function Subscriptions(){return <main><section className="page-hero"><div className="shell"><div className="crumb">KitKleen / Subscriptions</div><h1>Care on a schedule.<br/><em>Stay match-ready.</em></h1><p>A dedicated membership area inspired by repeat-use services: recurring cleaning, easier rebooking and future member benefits.</p></div></section>
+<section className="section section-white"><div className="shell"><div className="section-title"><div><div className="eyebrow">Membership Ideas</div><h2>Choose your <em>care level</em></h2></div></div>
+<div className="package-grid">{plans.map(([name,forWhom,desc,status])=><article className="package-card" key={name}><span className="tag">{status}</span><h3>{name}</h3><p><b>{forWhom}</b><br/>{desc}</p><Link className="btn btn-secondary" href="/contact">Enquire about this →</Link></article>)}</div>
+<div style={{marginTop:25}} className="empty-state"><h2>Subscriptions are being shaped around your service model.</h2><p>These plans are a creative starting point, not live commercial subscriptions yet.</p></div>
+</div></section></main>}
