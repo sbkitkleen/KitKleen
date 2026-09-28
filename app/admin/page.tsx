@@ -40,7 +40,7 @@ const statusOptions = [
   { value: "cleaning", label: "Cleaning" },
   { value: "quality_check", label: "Quality Check" },
   { value: "ready", label: "Ready" },
-  { value: "completed", label: "Completed" },
+  { value: "delivered", label: "Completed" },
   { value: "cancelled", label: "Cancelled" },
 ];
 
@@ -67,7 +67,7 @@ function formatStatus(status: string) {
     cleaning: "CLEANING",
     quality_check: "QUALITY CHECK",
     ready: "READY",
-    completed: "COMPLETED",
+    delivered: "COMPLETED",
     cancelled: "CANCELLED",
   };
   return labels[normalized] ?? displayStatus(status || "unknown").toUpperCase();
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
   ).length;
 
   const completedBookings = bookings.filter(
-    (booking) => booking.status === "completed"
+    (booking) => booking.status === "delivered"
   ).length;
 
   const totalRevenue = bookings.reduce(
@@ -438,7 +438,7 @@ function DashboardStyles() {
       .status-cleaning { border-color: #D3E1EA; background: #F0F5F8; color: #52758B; }
       .status-quality_check { border-color: #DBD8ED; background: #F5F3FA; color: #6B628E; }
       .status-ready { border-color: #D8E6BC; background: #F3F8E9; color: #64852E; }
-      .status-completed { border-color: #D5E3DA; background: #F0F6F2; color: #54745F; }
+      .status-delivered { border-color: #D5E3DA; background: #F0F6F2; color: #54745F; }
       .status-cancelled { border-color: #E8D7D2; background: #FBF4F2; color: #976253; }
       .row-actions { display: flex; align-items: center; gap: 6px; }
       .view-button, .whatsapp-button { height: 27px; display: inline-flex; align-items: center; justify-content: center; gap: 5px; border: 1px solid #D7E2DE; border-radius: 4px; background: #fff; color: #587078; font: 700 9px "DM Sans", Arial, sans-serif; white-space: nowrap; }
