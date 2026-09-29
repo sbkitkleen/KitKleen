@@ -2,13 +2,15 @@
 
 import {useState} from "react";
 import {bags,packages,services} from "@/lib/data";
+import {useCart} from "@/components/CartContext";
+import { supabase } from "@/lib/supabase";
 import {FaCalendarDays,FaCheck,FaMinus,FaPlus,FaWhatsapp} from "react-icons/fa6";
 
 type ServiceType="deep-clean"|"pro-care"|"individual"|"";
 type CustomerDetails={name:string;mobile:string;email:string;location:string;date:string;notes:string};
 
 const gearOptions=[
-  ...services.filter(item=>item.id!=="supporters").map(item=>({...item,displayName:item.name.replace(" — "," ")})),
+  ...services.map(item=>({...item,displayName:item.name.replace(" — "," ")})),
   ...bags.map(item=>({...item,displayName:item.name.replace("Kit Bag — ","Kit Bag - ")})),
 ];
 const serviceOptions=[
@@ -25,28 +27,38 @@ function localDateString(){
   return `${year}-${month}-${day}`;
 }
 
-export function BookingForm(){
-  const [serviceType,setServiceType]=useState<ServiceType>("");
+export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:"deep-clean"|"pro-care";fromCart?:boolean}){
+  const {items:cartItems,addItem,updateQty}=useCart();
+  const [serviceType,setServiceType]=useState<ServiceType>(initialPackage??"");
   const [quantities,setQuantities]=useState<Record<string,number>>({});
   const [customer,setCustomer]=useState<CustomerDetails>({name:"",mobile:"",email:"",location:"",date:"",notes:""});
   const [error,setError]=useState("");
   const [submitted,setSubmitted]=useState(false);
-  const selectedGear=gearOptions.filter(item=>(quantities[item.id]??0)>0);
-  const selectedPackage=packages.find(item=>item.id===serviceType);
-  const serviceName=selectedPackage?.name??(serviceType==="individual"?"Individual Gear":"Not selected");
-  const total=selectedPackage?.price??selectedGear.reduce<number>((sum,item)=>sum+item.price*(quantities[item.id]??0),0);
-  const summaryItems:{name:string;quantity:number}[]=selectedPackage?[{name:selectedPackage.name,quantity:1}]:selectedGear.map(item=>({name:item.displayName,quantity:quantities[item.id]}));
+  const cartPackage=fromCart?packages.find(item=>cartItems.some(cartItem=>cartItem.id===item.id)):undefined;
+  const effectiveServiceType=serviceType||cartPackage?.id||(fromCart&&cartItems.some(cartItem=>gearOptions.some(item=>item.id===cartItem.id))?"individual":"");
+  const selectedPackage=packages.find(item=>item.id===effectiveServiceType);
+  const usesCartItems=fromCart&&effectiveServiceType==="individual";
+  const quantityFor=(id:string)=>usesCartItems?cartItems.find(item=>item.id===id)?.qty??0:quantities[id]??0;
+  const selectedGear=effectiveServiceType==="individual"?gearOptions.filter(item=>quantityFor(item.id)>0):[];
+  const serviceName=selectedPackage?.name??(effectiveServiceType==="individual"?"Individual Gear":"Not selected");
+  const total=selectedPackage?.price??selectedGear.reduce<number>((sum,item)=>sum+item.price*quantityFor(item.id),0);
+  const summaryItems:{name:string;quantity:number}[]=selectedPackage?[{name:selectedPackage.name,quantity:cartPackage?.id===selectedPackage.id?cartItems.find(item=>item.id===selectedPackage.id)?.qty??1:1}]:selectedGear.map(item=>({name:item.displayName,quantity:quantityFor(item.id)}));
+  const bookingLines=selectedPackage?[`${selectedPackage.name} × ${summaryItems[0].quantity}`]:selectedGear.map(item=>`${item.displayName} × ${quantityFor(item.id)}`);
   const whatsappMessage=[
-    "Hi KitKleen, I would like to request a booking.",
-    `Customer: ${customer.name}`,
-    `Mobile: ${customer.mobile}`,
-    `Email: ${customer.email||"Not provided"}`,
-    `Service: ${serviceName}`,
-    `Selected gear: ${selectedGear.length?selectedGear.map(item=>`${item.displayName} x ${quantities[item.id]}`).join(", "):selectedPackage?.name??"None selected"}`,
-    `Estimated total: ₹${total}`,
-    `Preferred date: ${customer.date}`,
+    "Hi KitKleen,",
+    "",
+    "I would like to book a cleaning service.",
+    "",
+    "Items:",
+    ...(bookingLines.length?bookingLines:["No items selected"]),
+    "",
+    `Estimated Total: ₹${total}`,
+    "",
+    `Preferred Date: ${customer.date}`,
     `Location: ${customer.location}`,
-    `Additional notes: ${customer.notes||"None"}`,
+    "",
+    "Additional Notes:",
+    customer.notes||"None",
   ].join("\n");
   const whatsappUrl=`https://wa.me/918978371100?text=${encodeURIComponent(whatsappMessage)}`;
 
@@ -55,6 +67,15 @@ export function BookingForm(){
   }
 
   function updateQuantity(id:string,change:number){
+    if(usesCartItems){
+      const currentQuantity=cartItems.find(item=>item.id===id)?.qty??0;
+      const nextQuantity=currentQuantity+change;
+      if(nextQuantity<=0){updateQty(id,0);return;}
+      const gear=gearOptions.find(item=>item.id===id);
+      if(currentQuantity>0){updateQty(id,nextQuantity);return;}
+      if(gear&&change>0)addItem({id:gear.id,name:gear.name,price:gear.price});
+      return;
+    }
     setQuantities(current=>{
       const quantity=Math.max(0,(current[id]??0)+change);
       if(quantity===0){const next={...current};delete next[id];return next;}
@@ -62,13 +83,103 @@ export function BookingForm(){
     });
   }
 
-  function submitBooking(event:React.FormEvent<HTMLFormElement>){
-    event.preventDefault();
-    setError("");
-    if(serviceType==="individual"&&!selectedGear.length){setError("Select at least one gear item to continue.");return;}
-    if(customer.date<localDateString()){setError("Choose today or a future date.");return;}
-    setSubmitted(true);
+async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  setError("");
+
+  if (effectiveServiceType === "individual" && !selectedGear.length) {
+    setError("Select at least one gear item to continue.");
+    return;
   }
+
+  if (effectiveServiceType !== "individual" && !selectedPackage) {
+    setError("Choose a service type to continue.");
+    return;
+  }
+
+  if (customer.date < localDateString()) {
+    setError("Choose today or a future date.");
+    return;
+  }
+
+  try {
+    // 1. Save the main booking
+    const { data: booking, error: bookingError } = await supabase
+      .from("bookings")
+      .insert({
+        customer_name: customer.name,
+        mobile: customer.mobile,
+        email: customer.email || null,
+        location: customer.location,
+        service_type: serviceName,
+        preferred_date: customer.date,
+        notes: customer.notes || null,
+        estimated_total: total,
+        status: "new",
+      })
+      .select("id")
+      .single();
+
+    if (bookingError) {
+  setError(
+    `Booking failed: ${bookingError.message || "Unknown error"}${
+      bookingError.code ? ` (Code: ${bookingError.code})` : ""
+    }`
+  );
+  return;
+}
+
+    // 2. Prepare booking items
+    type BookingItemInsert = {
+  booking_id: string;
+  item_name: string;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+    };
+    const bookingItems: BookingItemInsert[] = selectedPackage
+      ? [
+          {
+            booking_id: booking.id,
+            item_name: selectedPackage.name,
+            quantity: summaryItems[0]?.quantity ?? 1,
+            unit_price: selectedPackage.price,
+            total_price:
+              selectedPackage.price * (summaryItems[0]?.quantity ?? 1),
+          },
+        ]
+      : selectedGear.map((item) => {
+          const quantity = quantityFor(item.id);
+
+          return {
+            booking_id: booking.id,
+            item_name: item.displayName,
+            quantity,
+            unit_price: item.price,
+            total_price: item.price * quantity,
+          };
+        });
+
+    // 3. Save individual booking items
+    const { error: itemsError } = await supabase
+      .from("booking_items")
+      .insert(bookingItems);
+
+    if (itemsError) {
+      console.error("Booking items error:", itemsError);
+      setError(
+        "Your booking was created, but we couldn't save the selected items. Please contact us."
+      );
+      return;
+    }
+
+    // 4. Show success screen
+    setSubmitted(true);
+  } catch (error) {
+    console.error("Unexpected booking error:", error);
+    setError("Something went wrong. Please try again.");
+  }
+}
 
   return <div className="booking-layout">
     <div className="booking-form-column">
@@ -92,17 +203,17 @@ export function BookingForm(){
         <section className="booking-form-section">
           <div className="booking-section-heading"><span>02</span><div><div className="eyebrow">Choose your care</div><h2>Service Type</h2></div></div>
           <fieldset className="booking-service-options"><legend className="visually-hidden">Select a service type</legend>
-            {serviceOptions.map(option=><label className={`booking-service-option ${serviceType===option.id?"is-selected":""}`} key={option.id}>
-              <input type="radio" name="serviceType" value={option.id} required checked={serviceType===option.id} onChange={()=>{setServiceType(option.id);setError("");}}/>
+            {serviceOptions.map(option=><label className={`booking-service-option ${effectiveServiceType===option.id?"is-selected":""}`} key={option.id}>
+              <input type="radio" name="serviceType" value={option.id} required checked={effectiveServiceType===option.id} onChange={()=>{setServiceType(option.id);setError("");}}/>
               <span className="service-radio-indicator" aria-hidden="true"/>
               <span className="booking-service-copy"><strong>{option.name}</strong><small>{option.description}</small></span>
               {option.price!==null&&<strong className="booking-service-price">₹{option.price}</strong>}
             </label>)}
           </fieldset>
-          {serviceType==="individual"&&<div className="booking-gear-picker">
+          {effectiveServiceType==="individual"&&<div className="booking-gear-picker">
             <div className="booking-gear-heading"><h3>Select your gear</h3><span>Choose multiple items</span></div>
             <div className="booking-gear-list">{gearOptions.map(item=>{
-              const quantity=quantities[item.id]??0;
+              const quantity=quantityFor(item.id);
               return <div className={`booking-gear-row ${quantity?"has-quantity":""}`} key={item.id}>
                 <div className="booking-gear-name"><strong>{item.displayName}</strong><small>₹{item.price} each</small></div>
                 <div className="booking-quantity" aria-label={`${item.displayName} quantity`}>
