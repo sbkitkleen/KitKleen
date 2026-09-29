@@ -695,12 +695,7 @@ export function HomeExperience() {
               <span aria-hidden="true">↗</span>
             </a>
 
-            <a
-              className="booking-email"
-              href="mailto:sbkitkleen@gmail.com"
-            >
-              sbkitkleen@gmail.com
-            </a>
+
           </div>
         </div>
       </section>
