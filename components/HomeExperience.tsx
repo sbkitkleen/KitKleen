@@ -60,31 +60,37 @@ const gearCategories = [
     title: "CRICKET GEAR",
     description: "Pads and essential cricket gear care",
     icon: FaBaseballBatBall,
+    image: "/gear-care/cricket-gear.jpg",
   },
   {
     title: "HELMETS",
     description: "Sports and bike helmet care",
     icon: FaHelmetSafety,
+    image: "/gear-care/helmet.jpg",
   },
   {
     title: "GLOVES",
     description: "Sports and keeper glove care",
     icon: FaHands,
+    image: "/gear-care/gloves.jpg",
   },
   {
     title: "PROTECTIVE GEAR",
     description: "Thigh, elbow, chest and shin guard care",
     icon: FaShieldHalved,
+    image: "/gear-care/protective-gear.jpg",
   },
   {
     title: "FOOTWEAR",
     description: "Sports shoes and footwear care",
     icon: FaShoePrints,
+    image: "/gear-care/footwear.jpg",
   },
   {
     title: "KIT BAGS",
     description: "Cleaning and care for sports kit bags",
     icon: FaBagShopping,
+    image: "/gear-care/kit-bag.jpg",
   },
 ];
 
@@ -453,7 +459,14 @@ export function HomeExperience() {
                   href="/pricing"
                   key={category.title}
                 >
-                  <div className="gear-category-top">
+                  <div
+                    className="gear-category-image"
+                    style={{
+                      backgroundImage: `url(${category.image})`,
+                    }}
+                    role="img"
+                    aria-label={`${category.title} professional gear care`}
+                  >
                     <span className="gear-category-icon">
                       <Icon aria-hidden="true" />
                     </span>
