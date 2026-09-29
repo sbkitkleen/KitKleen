@@ -103,10 +103,13 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
   }
 
   try {
+    const bookingId = crypto.randomUUID();
+
     // 1. Save the main booking
-    const { data: booking, error: bookingError } = await supabase
+    const { error: bookingError } = await supabase
       .from("bookings")
       .insert({
+        id: bookingId,
         customer_name: customer.name,
         mobile: customer.mobile,
         email: customer.email || null,
@@ -116,9 +119,7 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
         notes: customer.notes || null,
         estimated_total: total,
         status: "new",
-      })
-      .select("id")
-      .single();
+      });
 
     if (bookingError) {
   setError(
@@ -140,7 +141,7 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
     const bookingItems: BookingItemInsert[] = selectedPackage
       ? [
           {
-            booking_id: booking.id,
+            booking_id: bookingId,
             item_name: selectedPackage.name,
             quantity: summaryItems[0]?.quantity ?? 1,
             unit_price: selectedPackage.price,
@@ -152,7 +153,7 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
           const quantity = quantityFor(item.id);
 
           return {
-            booking_id: booking.id,
+            booking_id: bookingId,
             item_name: item.displayName,
             quantity,
             unit_price: item.price,
