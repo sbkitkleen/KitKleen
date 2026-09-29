@@ -432,97 +432,6 @@ export function HomeExperience() {
         </div>
       </section>
 
-      {/* EXPLORE GEAR CARE */}
-      <section
-        className="gear-category-section"
-        id="what-we-clean"
-      >
-        <div className="shell">
-          <SectionHeading
-            eyebrow="Explore Gear Care"
-            title={
-              <>
-                CARE FOR EVERY PIECE{" "}
-                <em>OF YOUR GAME.</em>
-              </>
-            }
-            description="From protective gear and gloves to footwear and kit bags, explore professional care options designed around sports gear."
-          />
-
-          <div className="gear-category-grid">
-            {gearCategories.map((category) => {
-              const Icon = category.icon;
-
-              return (
-                <Link
-                  className="gear-category-card"
-                  href="/pricing"
-                  key={category.title}
-                >
-                  <div
-                    className="gear-category-image"
-                    style={{
-                      backgroundImage: `url(${category.image})`,
-                    }}
-                    role="img"
-                    aria-label={`${category.title} professional gear care`}
-                  >
-                    <span className="gear-category-icon">
-                      <Icon aria-hidden="true" />
-                    </span>
-                  </div>
-
-                  <h3>{category.title}</h3>
-
-                  <p>{category.description}</p>
-
-                  <FaArrowRight
-                    className="gear-category-arrow"
-                    aria-hidden="true"
-                  />
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="gear-category-action">
-            <Link
-              className="btn btn-primary"
-              href="/pricing"
-            >
-              View All Gear &amp; Pricing{" "}
-              <FaArrowRight aria-hidden="true" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* COMPLETE KIT PACKAGES */}
-      <section className="section package-home-section">
-        <div className="shell">
-          <SectionHeading
-            eyebrow="Complete Kit Packages"
-            title={
-              <>
-                FULL KIT.
-                <br />
-                <em>FULLY CARED FOR.</em>
-              </>
-            }
-            description="Two complete-kit options. Clear inclusions, no guesswork."
-          />
-
-          <div className="package-grid">
-            {packages.map((item) => (
-              <PackageCard
-                item={item}
-                key={item.id}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CARE PROCESS */}
       <section className="section process-section">
         <div className="shell">
@@ -661,6 +570,97 @@ export function HomeExperience() {
         </div>
       </section>
 
+      {/* EXPLORE GEAR CARE */}
+      <section
+        className="gear-category-section"
+        id="what-we-clean"
+      >
+        <div className="shell">
+          <SectionHeading
+            eyebrow="Explore Gear Care"
+            title={
+              <>
+                CARE FOR EVERY PIECE{" "}
+                <em>OF YOUR GAME.</em>
+              </>
+            }
+            description="From protective gear and gloves to footwear and kit bags, explore professional care options designed around sports gear."
+          />
+
+          <div className="gear-category-grid">
+            {gearCategories.map((category) => {
+              const Icon = category.icon;
+
+              return (
+                <Link
+                  className="gear-category-card"
+                  href="/pricing"
+                  key={category.title}
+                >
+                  <div
+                    className="gear-category-image"
+                    style={{
+                      backgroundImage: `url(${category.image})`,
+                    }}
+                    role="img"
+                    aria-label={`${category.title} professional gear care`}
+                  >
+                    <span className="gear-category-icon">
+                      <Icon aria-hidden="true" />
+                    </span>
+                  </div>
+
+                  <h3>{category.title}</h3>
+
+                  <p>{category.description}</p>
+
+                  <FaArrowRight
+                    className="gear-category-arrow"
+                    aria-hidden="true"
+                  />
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="gear-category-action">
+            <Link
+              className="btn btn-primary"
+              href="/pricing"
+            >
+              View All Gear &amp; Pricing{" "}
+              <FaArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* COMPLETE KIT PACKAGES */}
+      <section className="section package-home-section">
+        <div className="shell">
+          <SectionHeading
+            eyebrow="Complete Kit Packages"
+            title={
+              <>
+                FULL KIT.
+                <br />
+                <em>FULLY CARED FOR.</em>
+              </>
+            }
+            description="Two complete-kit options. Clear inclusions, no guesswork."
+          />
+
+          <div className="package-grid">
+            {packages.map((item) => (
+              <PackageCard
+                item={item}
+                key={item.id}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* BOOKING CTA */}
       <section className="booking-band">
         <div className="shell booking-inner">
@@ -704,6 +704,7 @@ export function HomeExperience() {
           </div>
         </div>
       </section>
+
     </>
   );
 }
