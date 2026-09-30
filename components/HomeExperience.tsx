@@ -317,51 +317,67 @@ export function HomeExperience() {
         </div>
       </div>
 
-      <div className="ozone-benefit-grid">
+      <div className="care-benefit-grid">
 
-        <article className="ozone-benefit">
-          <div className="ozone-benefit-icon">O₃</div>
-          <div>
-            <h3>REACHES HARD-TO-REACH AREAS</h3>
-            <p>
-              Controlled ozone treatment can reach spaces around and within
-              suitable gear surfaces that may be difficult to clean through
-              wiping alone.
-            </p>
+        <article className="care-benefit">
+          <div className="care-benefit-top">
+            <span className="care-icon" aria-hidden="true">O₃</span>
           </div>
+
+          <h3>REACHES HARD-TO-REACH AREAS</h3>
+
+          <p>
+            Controlled ozone treatment can reach spaces around and within
+            suitable gear surfaces that may be difficult to clean through
+            wiping alone.
+          </p>
+
+          <span className="care-card-rule" aria-hidden="true" />
         </article>
 
-        <article className="ozone-benefit">
-          <div className="ozone-benefit-icon">≋</div>
-          <div>
-            <h3>HELPS CONTROL ODOUR</h3>
-            <p>
-              Ozone treatment helps break down odour-causing compounds,
-              supporting fresher-smelling gear after repeated use.
-            </p>
+        <article className="care-benefit">
+          <div className="care-benefit-top">
+            <span className="care-icon" aria-hidden="true">≋</span>
           </div>
+
+          <h3>HELPS CONTROL ODOUR</h3>
+
+          <p>
+            Ozone treatment helps break down odour-causing compounds,
+            supporting fresher-smelling gear after repeated use.
+          </p>
+
+          <span className="care-card-rule" aria-hidden="true" />
         </article>
 
-        <article className="ozone-benefit">
-          <div className="ozone-benefit-icon">✓</div>
-          <div>
-            <h3>CONTROLLED SANITISATION</h3>
-            <p>
-              Under controlled treatment conditions, ozone can help reduce
-              microbial contamination on suitable gear surfaces.
-            </p>
+        <article className="care-benefit">
+          <div className="care-benefit-top">
+            <span className="care-icon" aria-hidden="true">✓</span>
           </div>
+
+          <h3>CONTROLLED SANITISATION</h3>
+
+          <p>
+            Under controlled treatment conditions, ozone can help reduce
+            microbial contamination on suitable gear surfaces.
+          </p>
+
+          <span className="care-card-rule" aria-hidden="true" />
         </article>
 
-        <article className="ozone-benefit">
-          <div className="ozone-benefit-icon">⚙</div>
-          <div>
-            <h3>CONTROLLED PROCESS</h3>
-            <p>
-              After treatment, ozone is safely broken down and removed as
-              part of the controlled process before the gear is returned.
-            </p>
+        <article className="care-benefit">
+          <div className="care-benefit-top">
+            <span className="care-icon" aria-hidden="true">⚙</span>
           </div>
+
+          <h3>CONTROLLED PROCESS</h3>
+
+          <p>
+            After treatment, ozone is safely broken down and removed as
+            part of the controlled process before the gear is returned.
+          </p>
+
+          <span className="care-card-rule" aria-hidden="true" />
         </article>
 
       </div>

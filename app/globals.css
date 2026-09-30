@@ -815,3 +815,20 @@ html{scroll-padding-top:82px}body{background:var(--cream)}
     margin-top: 14px;
   }
 }
+@media (max-width: 900px) {
+  .ozone-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .ozone-layout {
+    grid-template-columns: 1fr !important;
+    gap: 28px;
+  }
+
+  .ozone-technology-visual {
+    width: 100%;
+    height: 380px;
+  }
+}
