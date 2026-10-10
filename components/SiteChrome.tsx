@@ -39,14 +39,14 @@ export function SiteFooter() {
         <div className="brand-word footer-word">KIT<span>KLEEN</span></div>
         <p>Professional Sports Gear Care<br/>Clean • Care • Restore</p>
         <div className="social-row" aria-label="Social profiles">
-          <button type="button" disabled title="Official Instagram profile not configured" aria-label="Instagram profile not configured"><FaInstagram aria-hidden="true"/></button>
-          <button type="button" disabled title="Official Facebook profile not configured" aria-label="Facebook profile not configured"><FaFacebookF aria-hidden="true"/></button>
-          <button type="button" disabled title="Official YouTube profile not configured" aria-label="YouTube profile not configured"><FaYoutube aria-hidden="true"/></button>
+          <a href="https://www.instagram.com/kitkleen/" target="_blank" rel="noopener noreferrer" aria-label="Visit KitKleen on Instagram"><FaInstagram aria-hidden="true"/></a>
+          <a href="https://www.facebook.com/share/1FbGdQVMrh/" target="_blank" rel="noopener noreferrer" aria-label="Visit KitKleen on Facebook"><FaFacebookF aria-hidden="true"/></a>
+          <a href="https://www.youtube.com/@KitKleen" target="_blank" rel="noopener noreferrer" aria-label="Visit KitKleen on YouTube"><FaYoutube aria-hidden="true"/></a>
         </div>
       </div>
-      <div><h4>Explore</h4><Link href="/services">Services</Link><Link href="/subscriptions">Subscriptions</Link><Link href="/offers">Offers</Link></div>
+      <div><h4>Explore</h4><Link href="/services">Services</Link><Link href="/gear-care">Gear Care Guide</Link><Link href="/subscriptions">Subscriptions</Link><Link href="/offers">Offers</Link></div>
       <div><h4>KitKleen</h4><Link href="/about">About Us</Link><Link href="/faq">FAQ</Link><Link href="/contact">Contact</Link><Link href="/login">Login / Create Account</Link></div>
-      <div className="footer-contact"><h4>Get in Touch</h4><a href="mailto:sbkitkleen@gmail.com"><FaEnvelope aria-hidden="true"/><span>sbkitkleen@gmail.com</span></a><a href="tel:+918978371100"><FaPhone aria-hidden="true"/><span>+91 89783 71100</span></a><a href="https://wa.me/918978371100?text=Hi%20KitKleen%2C%20I%20would%20like%20to%20know%20more%20about%20your%20sports%20gear%20cleaning%20services." target="_blank" rel="noreferrer"><FaWhatsapp aria-hidden="true"/><span>Chat on WhatsApp →</span></a></div>
+      <div className="footer-contact"><h4>Get in Touch</h4><a href="mailto:info@kitkleen.in"><FaEnvelope aria-hidden="true"/><span>info@kitkleen.in</span></a><a href="tel:+918978371100"><FaPhone aria-hidden="true"/><span>+91 89783 71100</span></a><a href="https://wa.me/918978371100?text=Hi%20KitKleen%2C%20I%20would%20like%20to%20know%20more%20about%20your%20sports%20gear%20cleaning%20services." target="_blank" rel="noreferrer"><FaWhatsapp aria-hidden="true"/><span>Chat on WhatsApp →</span></a></div>
     </div>
     <div className="shell footer-bottom"><span>© {new Date().getFullYear()} KitKleen</span><span>Clean • Care • Restore</span></div>
   </footer>;

@@ -1522,7 +1522,55 @@ body {
   grid-column: 1 / -1;
 }
 
+.header .brand-word {
+  color: #011d44;
+}
+
+.header .brand-word span {
+  color: #579c27;
+}
+
+.ozone-process {
+  gap: 12px;
+}
+
+.ozone-process-step {
+  flex: 1 1 135px;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.ozone-process-icon {
+  width: 30px;
+  height: 30px;
+  flex-basis: 30px;
+  font-size: 15px;
+}
+
+.ozone-process-arrow {
+  font-size: 21px;
+}
+
+.timeline-copy p,
+.benefit-item p,
+.why-heading > p {
+  font-size: 16px;
+  line-height: 1.65;
+}
+
 @media (max-width: 650px) {
+  .ozone-process-step {
+    flex-basis: 125px;
+    font-size: 14px;
+  }
+
+  .timeline-copy p,
+  .benefit-item p,
+  .why-heading > p {
+    font-size: 15px;
+  }
+
   .kit-package-price-row {
     grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
@@ -1549,5 +1597,779 @@ body {
 
   .kit-package-saving {
     white-space: normal;
+  }
+}
+
+.gear-guide-hero {
+  max-width: 900px;
+}
+
+.gear-guide-hero h2,
+.guide-section-heading h2,
+.offers-section-heading h2,
+.offer-conditions h2 {
+  margin: 10px 0 14px;
+  color: var(--ink);
+  font: 700 clamp(34px, 4vw, 48px) / 0.98 "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.gear-guide-hero h2 em,
+.guide-section-heading h2 em,
+.offers-section-heading h2 em,
+.offer-conditions h2 em {
+  color: var(--teal);
+  font-style: normal;
+}
+
+.gear-guide-hero p,
+.guide-section-heading > p,
+.guide-topic-card p,
+.equipment-care-card p,
+.cleaning-interval-card p,
+.service-recommendation-card > p,
+.service-recommendation-card li,
+.offer-card p,
+.referral-card p,
+.offer-conditions li,
+.offer-system-note {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.gear-guide-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.gear-guide-jumps a {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  color: var(--teal);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.offer-guide-link {
+  color: var(--teal);
+  font-weight: 800;
+}
+
+.guide-section-heading,
+.offers-section-heading {
+  max-width: 790px;
+  margin-bottom: 27px;
+}
+
+.guide-section-heading h2,
+.offers-section-heading h2 {
+  margin-bottom: 0;
+}
+
+.guide-section-heading > p,
+.offers-section-heading > p {
+  margin: 13px 0 0;
+}
+
+.guide-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.guide-topic-card,
+.equipment-care-card,
+.cleaning-interval-card,
+.service-recommendation-card,
+.offer-card,
+.referral-card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: white;
+}
+
+.guide-topic-number,
+.offer-kicker {
+  color: #709143;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.guide-topic-card h3,
+.equipment-care-card h3,
+.cleaning-interval-card h3,
+.service-recommendation-card h3,
+.offer-card h3,
+.referral-card h3 {
+  margin: 10px 0 7px;
+  color: var(--ink);
+  font: 700 23px / 1.05 "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.guide-topic-card p,
+.equipment-care-card p,
+.cleaning-interval-card p,
+.service-recommendation-card > p,
+.offer-card p,
+.referral-card p {
+  margin: 0;
+}
+
+.equipment-care-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.equipment-care-card {
+  overflow: hidden;
+  padding: 0;
+}
+
+.equipment-care-card img {
+  display: block;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.equipment-care-card > div {
+  padding: 15px 17px 18px;
+}
+
+.equipment-care-card h3 {
+  margin-top: 0;
+}
+
+.gear-care-reminder {
+  margin: 22px 0 0;
+  padding: 17px 20px;
+  border-left: 4px solid var(--green);
+  background: #edf6e3;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.cleaning-interval-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cleaning-interval-card {
+  border-top: 3px solid var(--green);
+}
+
+.cleaning-interval-card h3 {
+  margin-top: 0;
+}
+
+.interval-qualification,
+.offer-note {
+  margin: 17px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.service-recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+}
+
+.service-recommendation-card {
+  border-top: 3px solid var(--teal);
+}
+
+.service-recommendation-frequency {
+  display: inline-block;
+  padding: 6px 9px;
+  border-radius: 3px;
+  background: var(--greenSoft);
+  color: #486d23;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.service-recommendation-card h3 {
+  margin-top: 15px;
+}
+
+.service-recommendation-card ul,
+.offer-conditions ul {
+  display: grid;
+  gap: 8px;
+  margin: 15px 0 0;
+  padding-left: 20px;
+}
+
+.service-recommendation-card li {
+  padding-left: 2px;
+}
+
+.offers-section-heading {
+  margin-bottom: 22px;
+}
+
+.offer-card-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.offer-card-grid-two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.offer-card-grid-three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.offer-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.offer-card-tall {
+  display: block;
+}
+
+.offer-rate {
+  display: block;
+  color: var(--teal);
+  font: 700 38px / 1 "Barlow Condensed";
+  white-space: nowrap;
+}
+
+.offer-card h3,
+.referral-card h3 {
+  margin-top: 0;
+}
+
+.offer-card-tall h3 {
+  margin-top: 13px;
+}
+
+.offer-note {
+  max-width: 900px;
+}
+
+.referral-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.referral-card {
+  padding: 23px;
+  border-top: 3px solid var(--green);
+}
+
+.referral-card .offer-rate {
+  margin: 10px 0;
+}
+
+.referral-card p + p {
+  margin-top: 12px;
+}
+
+.offer-conditions {
+  padding: clamp(22px, 4vw, 38px);
+  border-left: 4px solid var(--green);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.offer-conditions h2 {
+  margin-top: 7px;
+}
+
+.offer-conditions li {
+  padding-left: 3px;
+}
+
+.offer-system-note {
+  margin: 20px 0;
+  padding: 14px 16px;
+  border: 1px solid #d5e3cf;
+  background: #f2f7ec;
+}
+
+.offer-summary-note {
+  padding: 11px 12px;
+  border-left: 3px solid var(--green);
+  background: #f2f7ec;
+}
+
+.offer-summary-note a {
+  color: var(--teal);
+  font-weight: 800;
+}
+
+.academy-subscription-note {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  align-items: center;
+  gap: 35px;
+}
+
+.academy-subscription-note h2 {
+  margin: 10px 0 14px;
+  font: 700 clamp(34px, 4vw, 48px) / 0.98 "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.academy-subscription-note h2 em {
+  color: var(--teal);
+  font-style: normal;
+}
+
+.academy-subscription-note p {
+  max-width: 730px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.academy-subscription-tiers {
+  display: grid;
+  gap: 12px;
+}
+
+.academy-subscription-tiers .offer-card {
+  background: white;
+}
+
+.academy-subscription-tiers > .text-link {
+  justify-self: start;
+}
+
+@media (max-width: 900px) {
+  .academy-subscription-note {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-topic-grid,
+  .equipment-care-grid,
+  .service-recommendation-grid,
+  .offer-card-grid-three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cleaning-interval-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .academy-subscription-note {
+    gap: 22px;
+  }
+
+  .guide-topic-grid,
+  .equipment-care-grid,
+  .service-recommendation-grid,
+  .offer-card-grid-two,
+  .offer-card-grid-three,
+  .referral-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gear-guide-jumps a {
+    font-size: 12px;
+  }
+
+  .equipment-care-card {
+    display: grid;
+    grid-template-columns: 105px minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .equipment-care-card img {
+    height: 100%;
+    min-height: 125px;
+  }
+
+  .equipment-care-card > div {
+    padding: 13px;
+  }
+
+  .guide-topic-card,
+  .cleaning-interval-card,
+  .service-recommendation-card,
+  .offer-card,
+  .referral-card {
+    padding: 17px;
+  }
+
+  .cleaning-interval-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .offer-card {
+    grid-template-columns: 68px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .offer-card-tall {
+    display: block;
+  }
+
+  .gear-care-reminder {
+    padding: 15px;
+    font-size: 15px;
+  }
+
+  .gear-guide-hero p,
+  .guide-section-heading > p,
+  .guide-topic-card p,
+  .equipment-care-card p,
+  .cleaning-interval-card p,
+  .service-recommendation-card > p,
+  .service-recommendation-card li,
+  .offer-card p,
+  .referral-card p,
+  .offer-conditions li,
+  .offer-system-note {
+    font-size: 14px;
+  }
+}
+
+.membership-hero .eyebrow {
+  margin-top: 20px;
+}
+
+.membership-hero h1 {
+  max-width: 850px;
+}
+
+.membership-hero > .shell > p {
+  max-width: 740px;
+}
+
+.membership-hero .membership-status {
+  margin: 16px 0 0;
+  color: var(--teal);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.membership-hero-actions {
+  margin-top: 20px;
+}
+
+.membership-enquiry-note,
+.membership-finalising-note {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.membership-enquiry-note {
+  margin: 14px 0 0;
+}
+
+.membership-section-heading {
+  max-width: 780px;
+  margin-bottom: 28px;
+}
+
+.membership-section-heading h2,
+.membership-comparison h2,
+.membership-discount h2 {
+  margin: 10px 0 12px;
+  color: var(--ink);
+  font: 700 clamp(36px, 4.5vw, 52px) / 0.95 "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.membership-section-heading h2 em,
+.membership-comparison h2 em {
+  color: var(--teal);
+  font-style: normal;
+}
+
+.membership-section-heading > p,
+.membership-discount > div > p {
+  max-width: 720px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.membership-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 15px;
+}
+
+.membership-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 23px;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--teal);
+  background: white;
+  box-shadow: 0 7px 20px rgba(44, 83, 92, 0.04);
+}
+
+.membership-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.membership-planned,
+.membership-index {
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.membership-planned {
+  padding: 6px 8px;
+  border-radius: 3px;
+  background: var(--greenSoft);
+  color: #486d23;
+}
+
+.membership-index {
+  color: #709143;
+}
+
+.membership-card h3,
+.membership-comparison-grid h3 {
+  margin: 17px 0 5px;
+  color: var(--ink);
+  font: 700 30px / 1 "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.membership-audience {
+  color: var(--teal);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.membership-card > p,
+.membership-focus li,
+.membership-step p,
+.membership-comparison-grid p,
+.membership-finalising-note,
+.membership-discount li {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.membership-card > p {
+  margin: 12px 0 16px;
+}
+
+.membership-focus {
+  flex: 1;
+  margin-bottom: 20px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+}
+
+.membership-focus > span {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.membership-focus ul,
+.membership-discount ul {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding-left: 19px;
+}
+
+.membership-card .btn {
+  align-self: flex-start;
+}
+
+.membership-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.membership-step {
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: white;
+}
+
+.membership-step > span {
+  color: #709143;
+  font: 700 30px / 1 "Barlow Condensed";
+}
+
+.membership-step h3 {
+  margin: 17px 0 7px;
+  color: var(--ink);
+  font: 700 25px / 1.05 "Barlow Condensed";
+  text-transform: uppercase;
+}
+
+.membership-step p {
+  margin: 0;
+}
+
+.membership-comparison {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 10px 36px;
+  align-items: start;
+}
+
+.membership-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.membership-comparison-grid > article {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+}
+
+.membership-comparison-grid > article > span {
+  color: #709143;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.membership-comparison-grid h3 {
+  margin-top: 13px;
+}
+
+.membership-comparison-grid p {
+  margin: 0 0 14px;
+}
+
+.membership-comparison-grid .text-link {
+  display: inline-block;
+  min-height: 30px;
+  line-height: 1.5;
+}
+
+.membership-finalising-note {
+  grid-column: 2;
+  margin: 0;
+}
+
+.membership-discount {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 30px;
+  align-items: center;
+}
+
+.membership-discount h2 {
+  font-size: clamp(32px, 4vw, 44px);
+}
+
+.membership-discount > div > p {
+  margin-bottom: 13px;
+}
+
+.membership-discount ul {
+  padding: 17px 20px 17px 38px;
+  border-left: 3px solid var(--green);
+  background: white;
+}
+
+.membership-discount li {
+  padding-left: 2px;
+}
+
+.membership-discount li strong {
+  color: var(--teal);
+}
+
+.membership-card a:focus-visible,
+.membership-hero a:focus-visible,
+.membership-comparison a:focus-visible,
+.membership-discount a:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .membership-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .membership-comparison {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .membership-finalising-note {
+    grid-column: 1;
+  }
+
+  .membership-discount {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .membership-card-grid,
+  .membership-steps,
+  .membership-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .membership-card,
+  .membership-step,
+  .membership-comparison-grid > article {
+    padding: 18px;
+  }
+
+  .membership-card .btn {
+    width: 100%;
+  }
+
+  .membership-hero-actions .btn {
+    width: 100%;
+  }
+
+  .membership-discount ul {
+    padding-left: 32px;
+  }
+
+  .membership-card > p,
+  .membership-focus li,
+  .membership-step p,
+  .membership-comparison-grid p,
+  .membership-finalising-note,
+  .membership-discount li {
+    font-size: 14px;
   }
 }

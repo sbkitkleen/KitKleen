@@ -6,5 +6,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://www.kitkleen.in",
       lastModified: new Date(),
     },
+    {
+      url: "https://www.kitkleen.in/gear-care",
+      lastModified: new Date(),
+    },
   ];
 }

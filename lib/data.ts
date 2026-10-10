@@ -311,9 +311,21 @@ export const packages = kitPackages.flatMap((kit) =>
   }))
 );
 
+export const academyClubDiscountTiers = [
+  { discount: "5%", eligibility: "Up to 5 kits" },
+  { discount: "10%", eligibility: "More than 5 kits" },
+] as const;
+
+export const academyClubDiscountExplanation =
+  "The applicable academy/club discount is available on every qualifying order above ₹299. Academy/club discounts are separate from squad-day discounts and cannot be combined with other promotional offers.";
+
+export const academyClubDiscountFaqAnswer =
+  "Academies and clubs receive a 5% discount on qualifying orders of up to 5 kits and a 10% discount on qualifying orders of more than 5 kits. The discount is available on every qualifying order above ₹299. Academy/club discounts cannot be combined with squad-day, referral, festival or other promotional offers.";
+
 export const navItems = [
   ["Home", "/"],
   ["Services", "/services"],
+  ["Gear Care", "/gear-care"],
   ["Subscriptions", "/subscriptions"],
   ["Offers", "/offers"],
   ["About Us", "/about"],

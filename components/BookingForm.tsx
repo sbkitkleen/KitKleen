@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {useState} from "react";
 import {bags,careLevels,packages,services,type CareLevelId} from "@/lib/data";
 import {useCart} from "@/components/CartContext";
@@ -85,6 +86,7 @@ export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:(ty
     ...(bookingLines.length?bookingLines:["No items selected"]),
     "",
     `Estimated Total: ₹${total}`,
+    "Promotional discounts are not included in this estimate. Please confirm eligibility with KitKleen.",
     "",
     `Preferred Date: ${customer.date}`,
     `Location: ${customer.location}`,
@@ -281,7 +283,7 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
           <div className="booking-section-heading"><span>03</span><div><div className="eyebrow">Timing and details</div><h2>Preferred Date &amp; Notes</h2></div></div>
           <div className="booking-fields booking-fields-single">
             <label>Preferred Date *<span className="booking-date-input"><input type="date" required min={localDateString()} value={customer.date} onChange={event=>updateCustomer("date",event.target.value)}/><FaCalendarDays aria-hidden="true"/></span></label>
-            <label>Additional Notes<textarea value={customer.notes} onChange={event=>updateCustomer("notes",event.target.value)} placeholder="Tell us anything we should know about your gear or booking..." rows={4}/></label>
+            <label>Additional Notes<textarea value={customer.notes} onChange={event=>updateCustomer("notes",event.target.value)} placeholder="Tell us anything we should know about your gear or booking. Academy/club enquiries: include your organisation name and kit count." rows={4}/></label>
           </div>
         </section>
         {error&&<p className="booking-error" role="alert">{error}</p>}
@@ -299,6 +301,16 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
         <div><dt>Preferred date</dt><dd>{customer.date||"Not selected"}</dd></div>
       </dl>
       <div className="booking-summary-total"><span>Estimated Total</span><strong>₹{total}</strong></div>
+      <p className="offer-summary-note">
+        Academy/club discounts are subject to eligibility confirmation: 5% on
+        up to 5 kits or 10% on more than 5 kits, on every qualifying order
+        above ₹299. The threshold is assessed before package discounts, and a
+        qualifying complete-kit package meets the minimum. One additional
+        promotion per order; academy/club discounts cannot combine with squad
+        day, referral, festival or other promotional offers. This estimate does
+        not apply a discount.{" "}
+        <Link href="/offers#academy-club">View offer details</Link>
+      </p>
       <p>Final timing and handover details can be confirmed with our team.</p>
     </aside>
   </div>;

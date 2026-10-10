@@ -66,7 +66,17 @@ export default function Cart() {
                 <div className="actions">
                   <Link className="btn btn-primary" href="/booking?from=cart">Review enquiry →</Link>
                 </div>
-                <p className="form-note">The team will confirm availability and launch timing with you.</p>
+                <p className="form-note offer-summary-note">
+                  Academy/club discounts are subject to eligibility
+                  confirmation: 5% on up to 5 kits or 10% on more than 5 kits,
+                  on every qualifying order above ₹299. The threshold is
+                  assessed before package discounts, and a qualifying
+                  complete-kit package meets the minimum. Only one eligible
+                  additional promotion may be used; academy/club discounts
+                  cannot combine with squad-day, referral, festival or other
+                  promotional offers. This estimate does not apply a discount.{" "}
+                  <Link href="/offers#academy-club">View offer details</Link>
+                </p>
               </aside>
             </div>
           )}

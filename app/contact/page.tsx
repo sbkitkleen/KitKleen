@@ -4,7 +4,7 @@ export default function Contact(){
  const [sent,setSent]=useState(false);
  return <main><section className="page-hero"><div className="shell"><div className="crumb">KitKleen / Contact</div><h1>Let’s talk<br/><em>gear care.</em></h1><p>Questions, bulk requirements, academy or club enquiries — send us a message.</p></div></section><section className="section section-white"><div className="shell contact-grid">
  <div className="contact-cards">
-  <div className="contact-card"><small>Email</small><strong><a href="mailto:sbkitkleen@gmail.com">sbkitkleen@gmail.com</a></strong><p>Best for general enquiries.</p></div>
+  <div className="contact-card"><small>Email</small><strong><a href="mailto:info@kitkleen.in">info@kitkleen.in</a></strong><p>Best for general enquiries.</p></div>
   <div className="contact-card"><small>Phone</small><strong><a href="tel:+918978371100">+91 89783 71100</a></strong><p>Call during business hours.</p></div>
     <div className="contact-card"><small>WhatsApp</small><strong><a href="https://wa.me/918978371100?text=Hi%20KitKleen%2C%20I%20would%20like%20to%20know%20more%20about%20your%20sports%20gear%20cleaning%20services." target="_blank" rel="noreferrer">Chat on WhatsApp →</a></strong><p>Quickest route for booking discussions.</p></div>
  </div>
