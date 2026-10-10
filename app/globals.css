@@ -610,6 +610,102 @@ html{scroll-padding-top:82px}body{background:var(--cream)}
   }
 }
 
+@media (max-width: 650px) {
+  .package-grid.complete-kit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.gear-benefit{color:var(--teal);font-weight:700}
+
+/* Service-first catalogue and shared enquiry cart */
+.services-shopping-section{padding-top:48px}
+.services-shopping-heading{display:flex;align-items:end;justify-content:space-between;gap:32px;margin-bottom:27px}
+.services-shopping-heading h2,.services-category-heading h2{margin:8px 0 0;font:700 48px/.9 "Barlow Condensed";text-transform:uppercase}
+.services-shopping-heading h2 em,.services-category-heading h2 em{color:var(--teal);font-style:normal}
+.services-shopping-heading>p{max-width:470px;margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.services-shopping-layout{display:grid;grid-template-columns:minmax(0,1fr) 345px;align-items:start;gap:24px}
+.services-shopping-catalogue{min-width:0}
+.services-category-list{gap:30px}
+.services-category{min-width:0}
+.services-category-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:13px}
+.services-category-heading h2{font:700 33px/.95 "Barlow Condensed";text-transform:uppercase}
+.services-category-heading>span{color:var(--muted);font-size:10px;font-weight:700}
+.service-selection-list{display:grid;gap:9px}
+.service-selection-card{overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:15px;transition:border-color .18s,box-shadow .18s}
+.service-selection-card:hover,.service-selection-card.is-expanded{border-color:#a9c7b8;box-shadow:0 8px 22px rgba(16,47,62,.06)}
+.service-selection-trigger{display:grid;width:100%;min-height:70px;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 16px;border:0;background:#fff;text-align:left;color:var(--ink);cursor:pointer}
+.service-selection-icon{display:grid;width:40px;height:40px;place-items:center;border-radius:12px;background:var(--sky);color:var(--teal);font-size:21px}
+.service-selection-title{display:grid;gap:4px;min-width:0}
+.service-selection-title strong{font:700 22px/1 "Barlow Condensed";text-transform:uppercase;overflow-wrap:anywhere}
+.service-selection-title small{color:var(--muted);font-size:9px}
+.service-selection-action{display:flex;align-items:center;gap:9px;color:var(--teal);font-size:9px;font-weight:900;white-space:nowrap}
+.service-selection-action svg{transition:transform .18s}
+.service-selection-card.is-expanded .service-selection-action svg{transform:rotate(180deg)}
+.service-care-options{display:grid;border-top:1px solid #e5eeea}
+.service-care-option{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid #e8efed}
+.service-care-option:last-child{border-bottom:0}
+.service-care-copy{display:grid;gap:3px;min-width:0}
+.service-care-copy>strong{font-size:11px;line-height:1.3}
+.service-care-copy>small{color:var(--muted);font-size:9px}
+.service-care-benefits{color:#536b6b;font-size:9px;line-height:1.55}
+.service-care-price{font:700 25px "Barlow Condensed";white-space:nowrap}
+.care-add-button{display:inline-flex;min-width:66px;min-height:38px;align-items:center;justify-content:center;gap:6px;padding:7px 11px;border:1px solid #c8ddd8;border-radius:999px;background:#fff;color:var(--teal);font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap}
+.care-add-button:hover{background:var(--teal);border-color:var(--teal);color:#fff}
+.inline-quantity-control{display:inline-flex;min-height:38px;align-items:center;justify-content:center;gap:5px;padding:3px;border:1px solid #cadbd8;border-radius:999px;background:#fff}
+.inline-quantity-control button{display:grid;width:31px;height:31px;place-items:center;border:0;border-radius:50%;background:#eaf4f1;color:var(--teal);cursor:pointer}
+.inline-quantity-control button:hover{background:var(--teal);color:white}
+.inline-quantity-control output{min-width:20px;text-align:center;font-size:11px;font-weight:900}
+.kit-packages-section{margin-top:42px;padding:25px;background:#fff;border:1px solid var(--line);border-radius:20px}
+.kit-packages-section .services-category-heading{align-items:end}
+.kit-packages-section .services-category-heading h2{font-size:41px}
+.kit-packages-intro{margin:0 0 17px;color:var(--muted);font-size:10px;line-height:1.7}
+.kit-package-grid{display:grid;gap:15px}
+.kit-package-card{padding:17px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.kit-package-card h4{margin:4px 0 13px;font:700 27px/1 "Barlow Condensed";text-transform:uppercase}
+.kit-package-includes{padding:12px 13px;border-radius:11px;background:#f5f8f4}
+.kit-package-includes>strong{display:block;margin-bottom:8px;color:var(--teal);font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.kit-package-includes ul{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:0;padding-left:15px;color:#536b6b;font-size:9px;line-height:1.5}
+.kit-package-prices{display:grid;margin-top:10px}
+.kit-package-price-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #e8efed}
+.kit-package-price-row:last-child{border-bottom:0}
+.kit-package-price-row>span{display:grid;gap:3px;min-width:0}
+.kit-package-price-row>span strong{font-size:10px}
+.kit-package-price-row>span small{color:var(--muted);font-size:9px}
+.launch-enquiry-note{margin:22px 0 0;padding:14px 16px;border:1px solid #d4e5c5;border-radius:12px;background:#f4f8ed;color:#34575c;font-size:10px;line-height:1.7}
+.services-cart-panel{position:sticky;top:92px;display:flex;max-height:calc(100dvh - 112px);min-height:330px;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:19px;background:#fff;box-shadow:var(--shadow)}
+.services-cart-panel-heading,.services-cart-drawer-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 18px 15px;border-bottom:1px solid #e8efed}
+.services-cart-panel-heading h2,.services-cart-drawer-heading h2{margin:5px 0 0;font:700 28px/.95 "Barlow Condensed";text-transform:uppercase}
+.services-cart-count{display:grid;width:32px;height:32px;place-items:center;border-radius:50%;background:var(--greenSoft);color:var(--teal);font-size:11px;font-weight:900}
+.services-cart-lines{display:grid;min-height:0;gap:0;overflow-y:auto;padding:0 17px}
+.services-cart-line{padding:13px 0;border-bottom:1px solid #e8efed}
+.services-cart-line-heading{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.services-cart-line-heading>div{display:grid;gap:4px;min-width:0}
+.services-cart-line-heading>div>strong{font-size:10px;line-height:1.35}
+.services-cart-line-heading small{color:var(--muted);font-size:9px;line-height:1.4}
+.services-cart-line-total{font:700 22px "Barlow Condensed";white-space:nowrap}
+.services-cart-line-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px}
+.services-cart-remove,.services-cart-clear{display:inline-flex;align-items:center;gap:6px;padding:6px 0;border:0;background:none;color:#647777;font-size:9px;font-weight:800;cursor:pointer}
+.services-cart-remove:hover,.services-cart-clear:hover{color:#a43e36}
+.services-cart-includes{margin-top:8px;color:#526a6d;font-size:9px}
+.services-cart-includes summary{cursor:pointer;font-weight:800}
+.services-cart-includes ul{display:grid;gap:4px;margin:7px 0;padding-left:16px;line-height:1.5}
+.services-cart-totals{display:grid;gap:10px;margin-top:auto;padding:15px 17px 17px;border-top:1px solid #e8efed}
+.services-cart-totals>div{display:flex;align-items:center;justify-content:space-between;color:#526a6d;font-size:10px}
+.services-cart-totals .services-cart-subtotal{color:var(--ink);font-weight:900}
+.services-cart-subtotal strong{font:700 28px "Barlow Condensed"}
+.services-cart-clear{justify-self:start}
+.services-cart-continue{width:100%;min-height:43px}
+.services-cart-totals>small{color:var(--muted);font-size:8px;text-align:center}
+.services-cart-empty{display:grid;justify-items:center;gap:8px;padding:40px 22px;text-align:center}
+.services-cart-empty>span{display:grid;width:42px;height:42px;place-items:center;border-radius:50%;background:var(--sky);color:var(--teal);font-size:23px}
+.services-cart-empty>strong{font:700 22px "Barlow Condensed";text-transform:uppercase}
+.services-cart-empty p{max-width:220px;margin:0;color:var(--muted);font-size:10px;line-height:1.6}
+.services-cart-empty a{margin-top:5px;color:var(--teal);font-size:10px;font-weight:900}
+.services-mobile-cart{display:none}
+@media(max-width:1050px) and (min-width:901px){.services-shopping-layout{grid-template-columns:minmax(0,1fr) 315px;gap:17px}.service-care-option{gap:8px;padding-inline:11px}.kit-packages-section{padding:19px}}
+@media(max-width:900px){.services-shopping-layout{grid-template-columns:minmax(0,1fr)}.services-cart-panel{position:static;max-height:460px;min-height:260px;order:-1}.services-cart-empty{padding:24px}.services-cart-lines{max-height:230px}.services-shopping-heading{align-items:start;flex-direction:column;gap:13px}}
+@media(max-width:650px){.services-shopping-section{padding:39px 0 100px}.services-shopping-heading{margin-bottom:22px}.services-shopping-heading h2{font-size:42px}.services-shopping-heading>p{font-size:11px}.services-category-list{gap:25px}.services-category-heading{margin-bottom:10px}.services-category-heading h2{font-size:28px}.service-selection-list{gap:7px}.service-selection-trigger{min-height:64px;grid-template-columns:36px minmax(0,1fr) auto;gap:9px;padding:10px}.service-selection-icon{width:35px;height:35px;font-size:19px}.service-selection-title strong{font-size:20px}.service-selection-action{gap:6px;font-size:8px}.service-care-option{grid-template-columns:minmax(0,1fr) auto;gap:6px 8px;padding:12px 10px}.service-care-copy{grid-column:1/-1}.service-care-copy>strong{font-size:11px}.service-care-benefits{font-size:9px}.service-care-price{font-size:23px}.care-add-button{min-width:66px;min-height:40px}.inline-quantity-control{min-height:40px}.inline-quantity-control button{width:33px;height:33px}.kit-packages-section{margin-top:32px;padding:15px;border-radius:16px}.kit-packages-section .services-category-heading h2{font-size:34px}.kit-package-card{padding:13px}.kit-package-card h4{font-size:24px}.kit-package-includes ul{grid-template-columns:1fr}.kit-package-price-row{grid-template-columns:minmax(0,1fr) auto auto;gap:7px}.kit-package-price-row .service-care-price{font-size:21px}.services-cart-panel{display:none}.services-mobile-cart{display:block;position:fixed;z-index:45;right:0;bottom:0;left:0;padding-bottom:env(safe-area-inset-bottom);background:#fff;box-shadow:0 -5px 22px rgba(16,47,62,.15)}.services-mobile-cart-bar{display:flex;width:100%;min-height:66px;align-items:center;justify-content:space-between;gap:12px;padding:9px 17px;border:0;background:#fff;text-align:left;color:var(--ink);cursor:pointer}.services-mobile-cart-bar>span:first-child{display:grid;gap:3px}.services-mobile-cart-bar>span:first-child strong{font-size:11px}.services-mobile-cart-bar>span:first-child small{color:var(--muted);font-size:9px}.services-mobile-cart-bar>span:last-child{display:inline-flex;align-items:center;gap:7px;padding:10px 13px;border-radius:999px;background:var(--teal);color:#fff;font-size:10px;font-weight:900;white-space:nowrap}.services-cart-backdrop{position:fixed;z-index:46;inset:0;border:0;background:rgba(13,35,42,.48)}.services-cart-drawer{position:fixed;z-index:47;right:0;bottom:calc(66px + env(safe-area-inset-bottom));left:0;display:flex;max-height:min(76dvh,680px);flex-direction:column;overflow:hidden;border-radius:20px 20px 0 0;background:#fff;box-shadow:0 -10px 35px rgba(16,47,62,.18)}.services-cart-drawer-heading{padding:16px}.services-cart-drawer-heading button{display:grid;width:38px;height:38px;place-items:center;border:1px solid var(--line);border-radius:50%;background:white;color:var(--teal)}.services-cart-drawer .services-cart-lines{flex:1}.services-cart-drawer .services-cart-totals{padding-bottom:14px}.services-cart-drawer .services-cart-empty{overflow:auto}.services-cart-panel{display:none}}
+
 @media (max-width: 620px) {
   .ozone-section {
     padding: 58px 0;
@@ -652,6 +748,49 @@ html{scroll-padding-top:82px}body{background:var(--cream)}
 .timeline:before{background:#c7d6d1;animation:none}.timeline:after{content:"";position:absolute;left:8px;right:8px;top:32px;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;animation:timeline-fill 1.6s .2s ease-out forwards}@keyframes timeline-fill{to{transform:scaleX(1)}}
 @media(max-width:650px){.timeline:before{background:#c7d6d1;animation:none}.timeline:after{left:20px;right:auto;top:12px;bottom:12px;width:2px;height:auto;background:var(--green);transform:scaleY(0);transform-origin:top;animation:timeline-fill-mobile 1.6s .2s ease-out forwards}@keyframes timeline-fill-mobile{to{transform:scaleY(1)}}}
 @media(prefers-reduced-motion:reduce){.timeline:after{animation:none;transform:scaleX(1)}@media(max-width:650px){.timeline:after{transform:scaleY(1)}}}
+
+/* Services tiers and launch messaging */
+.home-availability{display:table;width:fit-content;max-width:100%;margin:15px 0 0;padding:9px 14px;border:1px solid #d1e4d8;border-radius:999px;background:#f4f8ed;color:var(--teal);font-size:12px;font-weight:800;line-height:1.4}
+.care-level-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.care-level-card{padding:22px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 7px 20px rgba(44,83,92,.04)}
+.care-level-card h3{margin:8px 0 14px;font:700 30px/.95 "Barlow Condensed";text-transform:uppercase}
+.care-level-card ul,.package-includes{display:grid;gap:9px;padding:0;margin:0;list-style:none}
+.care-level-card li,.package-includes li{position:relative;padding-left:18px;color:#526a6d;font-size:11px;line-height:1.5}
+.care-level-card li:before,.package-includes li:before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:900}
+.care-level-fresh{border-top:4px solid #8fbd51}.care-level-deep{border-top:4px solid var(--teal)}.care-level-elite{border-top:4px solid var(--ink)}
+.services-category-list{display:grid;gap:34px}.services-category>h3,.kit-package-group>h3{display:flex;align-items:baseline;gap:12px;margin:0 0 15px;font:700 31px/.95 "Barlow Condensed";text-transform:uppercase}
+.services-category>h3 span,.bag-size-note{color:var(--muted);font:500 11px/1.6 "DM Sans",sans-serif;text-transform:none}
+.bag-size-note{margin:-4px 0 14px}
+.services-category .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.services-category .product-card{grid-template-columns:54px minmax(0,1fr);align-items:start;min-width:0}
+.services-category .product-card>div:last-child{min-width:0}
+.services-category .product-icon{min-height:54px}
+.services-category .product-card h3{font-size:25px;line-height:1.05;overflow-wrap:anywhere}
+.gear-price-list{display:grid;border-top:1px solid #e6eeea}
+.gear-price-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #e6eeea}
+.gear-price-row>span,.package-tier-price>span{display:grid;gap:2px;min-width:0}
+.gear-price-row>span strong,.package-tier-price>span strong{font-size:9px;line-height:1.3}
+.gear-price-row small,.package-tier-price small{color:var(--muted);font-size:8px;line-height:1.3}
+.gear-price-row>strong,.package-tier-price>strong{font:700 22px "Barlow Condensed";white-space:nowrap}
+.gear-price-row button{border:1px solid #c8ddd8;background:#fff;color:var(--teal);border-radius:999px;padding:6px 9px;font-size:8px;font-weight:900;cursor:pointer}
+.gear-price-row button:hover,.gear-price-row button.is-added{background:var(--teal);color:white}
+.kit-package-group{min-width:0}.package-grid.complete-kit-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.kit-package-group>.package-card{height:100%;padding:22px}
+.kit-package-group>.package-card h3{font-size:32px;line-height:1}
+.package-tier-prices{display:grid;margin:15px 0;border-top:1px solid #e6eeea}
+.package-tier-price{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #e6eeea}
+.package-tier-fresh>span strong{color:#668f30}.package-tier-deep>span strong{color:var(--teal)}.package-tier-elite>span strong{color:var(--ink)}
+.kit-package-group .package-includes{margin:17px 0}
+.kit-package-group .btn{max-width:100%;white-space:normal;text-align:center}
+.launch-enquiry-note{margin:26px 0 0;padding:14px 16px;border:1px solid #d4e5c5;border-radius:12px;background:#f4f8ed;color:#34575c;font-size:11px;line-height:1.7}
+.home-package-teaser{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px;background:#f6f9f3;border:1px solid var(--line);border-radius:18px}
+.home-package-teaser p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.home-package-teaser .btn{flex:0 0 auto}
+.booking-care-level{display:grid;gap:7px;margin:0 0 16px;color:var(--ink);font-size:11px;font-weight:800}
+.booking-care-level select{width:100%;padding:11px 12px;border:1px solid #d7e2e0;border-radius:9px;background:#fbfcfb;font-size:11px}
+.booking-care-level small{color:var(--muted);font-size:9px;font-weight:500}
+@media(max-width:900px){.care-level-grid{grid-template-columns:1fr 1fr}.care-level-card:last-child{grid-column:1/-1}}
+@media(max-width:650px){.home-availability{margin-top:11px;padding:8px 12px;font-size:11px}.care-level-grid,.services-category .product-grid,.package-grid.complete-kit-grid{grid-template-columns:1fr}.care-level-card:last-child{grid-column:auto}.services-category>h3,.kit-package-group>h3{font-size:27px;flex-wrap:wrap}.services-category .product-card{grid-template-columns:42px minmax(0,1fr);gap:10px;padding:12px}.services-category .product-icon{min-height:42px;font-size:24px}.services-category .product-card h3{font-size:22px}.gear-price-row{grid-template-columns:minmax(0,1fr) auto auto;gap:7px}.gear-price-row>strong{font-size:20px}.home-package-teaser{align-items:flex-start;flex-direction:column;padding:18px}.home-package-teaser .btn{max-width:100%;white-space:normal;text-align:center}.kit-package-group>.package-card{padding:18px}.launch-enquiry-note{font-size:10px}}
 
 /* Brand, care education, and performance progression */
 .brand-link{gap:9px}.brand-logo{width:64px;height:64px;object-fit:contain;transition:transform .22s ease}.brand-link:hover .brand-logo{transform:scale(1.06)}.brand-word{font-size:29px}.header-inner{height:74px}.footer-logo{width:76px;height:76px}.footer-brand .brand-word{display:none}.package-brand{display:flex;align-items:center;gap:8px;margin-bottom:13px;color:#637a76;font-size:8px;font-weight:900}.package-brand img{width:32px;height:32px;object-fit:contain}.package-card{transition:transform .22s,border-color .22s,box-shadow .22s}.package-card:hover{transform:translateY(-4px);border-color:#a9c7b8;box-shadow:0 18px 36px rgba(16,47,62,.12)}.header-actions .cart-link{transition:transform .2s,background .2s}.header-actions .cart-link:hover{transform:translateY(-2px);background:var(--teal2)}
@@ -830,5 +969,585 @@ html{scroll-padding-top:82px}body{background:var(--cream)}
   .ozone-technology-visual {
     width: 100%;
     height: 380px;
+  }
+}
+
+/* Shared type scale for readable body copy, controls, and supporting text. */
+:root {
+  --type-body: 16px;
+  --type-secondary: 14px;
+  --type-control: 15px;
+  --type-caption: 13px;
+}
+
+body {
+  font-size: var(--type-body);
+  line-height: 1.6;
+}
+
+.utility-bar,
+.kicker,
+.eyebrow,
+.crumb,
+.home-hero .eyebrow,
+.research-preview-label,
+.package-price .tag,
+.package-brand,
+.kit-package-includes > strong {
+  font-size: var(--type-caption);
+  line-height: 1.4;
+}
+
+.main-nav a,
+.header-login,
+.cart-link,
+.btn,
+.home-hero .btn,
+.booking-actions .btn,
+.form-submit,
+.auth-form button {
+  font-size: var(--type-control);
+}
+
+.main-nav a {
+  padding-inline: 9px;
+}
+
+.hero p,
+.section-title p,
+.page-hero p,
+.home-hero-copy > p,
+.home-section-title > p,
+.category-card p,
+.package-card p,
+.process-card p,
+.subscribe-grid p,
+.care-level-card li,
+.package-includes li,
+.care-matters-copy > p,
+.performance-copy > p,
+.research-copy p,
+.care-benefit p,
+.ozone-copy > p,
+.ozone-benefit p,
+.ozone-process,
+.gear-category-card p,
+.research-preview p,
+.home-package-teaser p,
+.footer p,
+.services-shopping-heading > p,
+.kit-packages-intro,
+.launch-enquiry-note,
+.services-cart-empty p,
+.empty-state p,
+.form-note,
+.contact-card p,
+.auth-card p,
+.faq-row p {
+  font-size: var(--type-secondary);
+  line-height: 1.65;
+}
+
+.hero-note,
+.hero-value-points li,
+.feature strong,
+.feature span,
+.care-elements,
+.care-number,
+.gear-category-index,
+.text-link,
+.package-includes li,
+.process-card p,
+.gear-card-category,
+.gear-card p,
+.gear-card-bottom button,
+.package-intro,
+.research-preview p,
+.audience-item span,
+.audience-item b,
+.service-selection-title small,
+.service-selection-action,
+.service-care-copy > small,
+.service-care-benefits,
+.kit-package-includes ul,
+.kit-package-price-row > span small,
+.services-cart-line-heading small,
+.services-cart-includes,
+.services-cart-totals > div,
+.services-cart-remove,
+.services-cart-clear,
+.services-cart-totals > small,
+.services-cart-empty a,
+.cart-item small,
+.summary-row,
+.footer-grid > div:not(.footer-brand) a,
+.footer-contact a,
+.footer-bottom,
+.footer h4 {
+  font-size: var(--type-caption);
+}
+
+.feature strong,
+.feature span,
+.hero-note,
+.gear-card-category,
+.services-cart-totals > div,
+.footer p,
+.footer-grid > div:not(.footer-brand) a,
+.footer-bottom {
+  line-height: 1.5;
+}
+
+.feature strong,
+.category-card p,
+.text-link,
+.package-price .tag,
+.package-home-section .package-includes li,
+.process-card p,
+.hero-value-points li,
+.research-preview p,
+.gear-card p,
+.service-selection-title small,
+.service-selection-action,
+.service-care-copy > strong,
+.service-care-copy > small,
+.service-care-benefits,
+.care-add-button,
+.inline-quantity-control output,
+.kit-package-includes ul,
+.kit-package-price-row > span strong,
+.kit-package-price-row > span small,
+.services-cart-line-heading > div > strong,
+.services-cart-line-heading small,
+.services-cart-remove,
+.services-cart-clear,
+.services-cart-totals > div,
+.services-cart-empty a,
+.cart-item small,
+.summary-row,
+.form-card label,
+.form-card input,
+.form-card select,
+.form-card textarea,
+.auth-tabs button,
+.auth-form input,
+.form-note,
+.contact-card small,
+.contact-card strong,
+.footer h4,
+.footer-grid > div:not(.footer-brand) a,
+.footer-contact a,
+.footer-bottom {
+  font-size: var(--type-secondary);
+}
+
+.main-nav a,
+.header-login,
+.cart-link,
+.btn,
+.care-add-button,
+.services-cart-continue,
+.services-mobile-cart-bar,
+.services-cart-remove,
+.services-cart-clear,
+.form-card label,
+.form-card input,
+.form-card select,
+.form-card textarea,
+.form-submit,
+.auth-tabs button,
+.auth-form input,
+.auth-form button,
+.footer-grid > div:not(.footer-brand) a,
+.footer-contact a {
+  line-height: 1.4;
+}
+
+.care-elements,
+.care-number,
+.gear-category-index {
+  font-size: var(--type-caption);
+}
+
+.services-category-heading > span,
+.service-selection-title small,
+.service-selection-action,
+.service-care-copy > strong,
+.service-care-copy > small,
+.service-care-benefits,
+.kit-package-includes > strong,
+.kit-package-includes ul,
+.kit-package-price-row > span strong,
+.kit-package-price-row > span small,
+.services-cart-line-heading > div > strong,
+.services-cart-line-heading small,
+.services-cart-remove,
+.services-cart-clear,
+.services-cart-totals > div,
+.services-cart-totals > small,
+.services-cart-empty p,
+.services-cart-empty a,
+.services-mobile-cart-bar small,
+.services-mobile-cart-bar > span:last-child,
+.services-cart-drawer-heading button,
+.care-add-button,
+.inline-quantity-control output {
+  font-size: var(--type-secondary);
+}
+
+.services-category-heading > span,
+.service-selection-action,
+.kit-package-includes > strong,
+.services-cart-remove,
+.services-cart-clear,
+.services-cart-totals > div,
+.services-cart-empty a {
+  line-height: 1.45;
+}
+
+.service-selection-trigger,
+.care-add-button,
+.services-cart-remove,
+.services-cart-clear,
+.services-cart-drawer-heading button,
+.services-mobile-cart-bar,
+.form-submit,
+.auth-tabs button {
+  min-height: 44px;
+}
+
+.home-availability,
+.package-intro,
+.gear-benefit,
+.gear-category-action .btn,
+.booking-care-level,
+.booking-care-level small,
+.service-care-option,
+.services-cart-includes ul,
+.services-cart-empty strong,
+.services-cart-subtotal strong,
+.services-cart-line-total,
+.services-mobile-cart-bar strong,
+.contact-card p,
+.auth-card p {
+  line-height: 1.6;
+}
+
+.home-availability,
+.package-intro,
+.booking-care-level,
+.booking-care-level small,
+.services-cart-includes,
+.services-cart-includes ul,
+.services-cart-empty p,
+.services-cart-totals > small,
+.contact-card p,
+.form-note,
+.auth-card p {
+  font-size: var(--type-caption);
+}
+
+.hero p,
+.section-title p,
+.page-hero p,
+.home-hero-copy > p,
+.home-section-title > p,
+.package-card p,
+.process-card p,
+.subscribe-grid p,
+.care-matters-copy > p,
+.performance-copy > p,
+.research-copy p,
+.care-benefit p,
+.ozone-copy > p,
+.ozone-benefit p,
+.research-preview p,
+.home-package-teaser p {
+  font-size: var(--type-body);
+}
+
+.about-copy > p,
+.research-message p,
+.credential-card p,
+.value-card p,
+.faq-row p,
+.booking-success > p {
+  font-size: var(--type-body);
+}
+
+.faq-nav div,
+.faq-row > span,
+.about-copy .value-card strong,
+.research-message p,
+.credential-card > span,
+.contact-card p,
+.form-card label,
+.form-note,
+.auth-card p,
+.auth-tabs button,
+.cart-item small,
+.summary-row,
+.booking-section-heading .eyebrow,
+.booking-fields label,
+.booking-service-copy strong,
+.booking-service-copy small,
+.booking-summary,
+.booking-care-level,
+.booking-care-level small {
+  font-size: var(--type-secondary);
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea,
+.auth-form input,
+.booking-fields input,
+.booking-fields textarea,
+.booking-care-level select {
+  font-size: var(--type-control);
+}
+
+.faq-row p,
+.about-copy > p,
+.research-message p,
+.credential-card p,
+.value-card p,
+.contact-card p,
+.form-note,
+.auth-card p,
+.booking-service-copy small,
+.booking-summary dl,
+.booking-success > p {
+  line-height: 1.65;
+}
+
+.faq-nav div,
+.faq-row > span,
+.auth-tabs button,
+.cart-item,
+.summary-row,
+.booking-fields label,
+.booking-service-copy strong,
+.booking-service-copy small {
+  line-height: 1.5;
+}
+
+.faq-row > span {
+  display: block;
+  padding-right: 25px;
+}
+
+.faq-row > b {
+  top: 18px;
+  width: 28px;
+  height: 28px;
+}
+
+.auth-tabs button,
+.research-preview-inner > a {
+  font-size: var(--type-control);
+}
+
+.research-preview-inner > a {
+  min-height: 44px;
+  line-height: 1.4;
+}
+
+.auth-tabs button,
+.cart-item .qty button,
+.cart-item .qty button:last-child,
+.booking-submit,
+.booking-whatsapp,
+.booking-service-option {
+  min-height: 44px;
+}
+
+.cart-item .qty button:not(:last-child) {
+  width: 44px;
+}
+
+.cart-item .qty span {
+  font-size: var(--type-secondary);
+}
+
+.cart-item .qty button:last-child {
+  font-size: var(--type-control);
+}
+
+.research-message h3 {
+  line-height: 1.1;
+}
+
+@media (max-width: 900px) {
+  .main-nav.nav-open a {
+    font-size: var(--type-control);
+  }
+}
+
+@media (max-width: 650px) {
+  .home-hero-copy > p,
+  .page-hero p,
+  .section-title p,
+  .home-section-title > p,
+  .home-package-teaser p,
+  .research-preview p,
+  .feature span,
+  .footer p,
+  .care-level-card li,
+  .package-includes li,
+  .care-benefit p,
+  .ozone-benefit p,
+  .care-matters-copy > p,
+  .performance-copy > p,
+  .gear-category-card p,
+  .footer p,
+  .footer-grid > div:not(.footer-brand) a,
+  .footer-contact a,
+  .footer-bottom {
+    font-size: var(--type-secondary);
+  }
+
+  .footer-contact a {
+    font-size: var(--type-secondary) !important;
+  }
+
+  .home-hero-copy > p,
+  .page-hero p,
+  .section-title p,
+  .home-section-title > p,
+  .home-package-teaser p,
+  .research-preview p {
+    font-size: var(--type-body);
+  }
+
+  .main-nav.nav-open a {
+    min-height: 44px;
+    font-size: var(--type-control);
+  }
+
+  .home-hero .btn,
+  .booking-actions .btn,
+  .gear-card-bottom button {
+    min-height: 44px;
+    font-size: var(--type-control);
+  }
+
+  .service-care-option {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+
+  .service-care-copy,
+  .service-care-benefits {
+    grid-column: 1 / -1;
+  }
+
+  .service-care-price {
+    grid-column: 2;
+  }
+
+  .care-add-button,
+  .inline-quantity-control {
+    grid-column: 3;
+  }
+
+  .care-add-button {
+    min-width: 74px;
+    padding-inline: 9px;
+  }
+
+  .kit-package-price-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 7px;
+  }
+
+  .footer-grid {
+    gap: 24px 14px;
+  }
+}
+
+.kit-package-card h4 {
+  overflow-wrap: anywhere;
+}
+
+.kit-package-price-row {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.kit-package-deal {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-items: start;
+  gap: 4px 9px;
+  min-width: 0;
+}
+
+.kit-package-deal del {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.25;
+  text-decoration-thickness: 1px;
+  white-space: nowrap;
+}
+
+.kit-package-deal .service-care-price {
+  font-size: 27px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.kit-package-discount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 7px;
+  border: 1px solid #d4e5c5;
+  border-radius: 999px;
+  background: #f2f7e9;
+  color: #557b2b;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.kit-package-saving {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.kit-package-deal .kit-package-saving {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 650px) {
+  .kit-package-price-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+  }
+
+  .kit-package-price-row > span:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .kit-package-price-row > .kit-package-deal {
+    grid-column: 1 / 3;
+    grid-template-columns: auto auto;
+    gap: 4px 8px;
+  }
+
+  .kit-package-price-row > .inline-quantity-control,
+  .kit-package-price-row > .care-add-button {
+    grid-column: 3;
+  }
+
+  .kit-package-deal .service-care-price {
+    font-size: 25px;
+  }
+
+  .kit-package-saving {
+    white-space: normal;
   }
 }

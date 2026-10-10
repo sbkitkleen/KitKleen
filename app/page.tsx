@@ -7,8 +7,8 @@ export default function Home(){
   <section className="home-hero"><div className="shell home-hero-grid">
     <div className="home-hero-copy"><div className="kicker">Professional Sports Gear Care</div><h1>CLEAN GEAR.<br/><em>READY TO PERFORM.</em></h1>
     <p>Professional cleaning, sanitisation and care for sports gear — helping your kit stay fresh, comfortable and ready for the next session.</p>
-    <p className="home-availability">Currently available in Hyderabad only.</p>
-    <div className="actions"><Link href="/booking" className="btn btn-primary">Book Your Kit Care <span aria-hidden="true">↗</span></Link><Link href="#what-we-clean" className="btn btn-secondary">Explore Services</Link></div></div>
+    <p className="home-availability">Coming soon to Hyderabad</p>
+    <div className="actions"><Link href="/contact" className="btn btn-primary">Enquire About Launch <span aria-hidden="true">↗</span></Link><Link href="/services" className="btn btn-secondary">Explore Services</Link></div></div>
     <div
       className="gear-stage"
       aria-label="KitKleen professional sports gear care"

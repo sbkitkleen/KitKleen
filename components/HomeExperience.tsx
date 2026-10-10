@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { packages } from "@/lib/data";
-import { PackageCard } from "@/components/PackageCard";
 import {
   FaArrowRight,
   FaBagShopping,
@@ -610,7 +608,7 @@ export function HomeExperience() {
               return (
                 <Link
                   className="gear-category-card"
-                  href="/pricing"
+                  href="/services#individual-gear"
                   key={category.title}
                 >
                   <div
@@ -642,9 +640,9 @@ export function HomeExperience() {
           <div className="gear-category-action">
             <Link
               className="btn btn-primary"
-              href="/pricing"
+              href="/services#individual-gear"
             >
-              View All Gear &amp; Pricing{" "}
+              View All Gear &amp; Care Prices{" "}
               <FaArrowRight aria-hidden="true" />
             </Link>
           </div>
@@ -663,16 +661,14 @@ export function HomeExperience() {
                 <em>FULLY CARED FOR.</em>
               </>
             }
-            description="Two complete-kit options. Clear inclusions, no guesswork."
+            description="Explore Cricket Kit and Wicket Keeper Batsman Kit packages with Fresh, Deep and Elite care options."
           />
 
-          <div className="package-grid">
-            {packages.map((item) => (
-              <PackageCard
-                item={item}
-                key={item.id}
-              />
-            ))}
+          <div className="home-package-teaser">
+            <p>See package inclusions and compare prices for all three care levels on the Services page.</p>
+            <Link className="btn btn-primary" href="/services#complete-kit-packages">
+              Compare Complete-Kit Packages <FaArrowRight aria-hidden="true" />
+            </Link>
           </div>
         </div>
       </section>
@@ -682,7 +678,7 @@ export function HomeExperience() {
         <div className="shell booking-inner">
           <div>
             <div className="eyebrow">
-              Ready when your kit is
+              Coming soon to Hyderabad
             </div>
 
             <h2>
@@ -695,9 +691,9 @@ export function HomeExperience() {
           <div className="booking-actions">
             <Link
               className="btn btn-primary"
-              href="/booking"
+              href="/contact"
             >
-              Book Your Kit Care{" "}
+              Enquire About Launch{" "}
               <span aria-hidden="true">↗</span>
             </Link>
 

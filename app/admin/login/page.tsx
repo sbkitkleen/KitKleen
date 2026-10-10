@@ -147,7 +147,7 @@ export default function AdminLoginPage() {
         } 
  
         .brand-small { 
-          font-size: 13px; 
+          font-size: var(--type-secondary);
           font-weight: 800; 
           letter-spacing: 2px; 
           color: #ffffff; 
@@ -168,7 +168,7 @@ export default function AdminLoginPage() {
         .admin-login-brand p { 
           margin: 0; 
           color: rgba(255, 255, 255, 0.7); 
-          font-size: 14px; 
+          font-size: var(--type-control);
         } 
  
         .admin-login-form { 
@@ -183,7 +183,7 @@ export default function AdminLoginPage() {
           display: block; 
           margin-bottom: 8px; 
           color: #17384b; 
-          font-size: 13px; 
+          font-size: var(--type-control);
           font-weight: 700; 
         } 
  
@@ -216,7 +216,7 @@ export default function AdminLoginPage() {
           border-radius: 7px; 
           background: #fff4f4; 
           color: #a33a3a; 
-          font-size: 13px; 
+          font-size: var(--type-control);
         } 
  
         .login-button { 
@@ -263,10 +263,19 @@ export default function AdminLoginPage() {
         .admin-copyright { 
           margin-top: 24px; 
           color: #71817d; 
-          font-size: 11px; 
+          font-size: var(--type-caption);
           text-align: center; 
         } 
  
+        .field input {
+          font-size: var(--type-control);
+        }
+
+        .login-button, .back-button {
+          min-height: 44px;
+          font-size: var(--type-control);
+        }
+
         @media (max-width: 600px) { 
           .admin-login-page { 
             padding: 40px 16px; 

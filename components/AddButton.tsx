@@ -1,6 +1,7 @@
 "use client";
 import {useCart} from "./CartContext";
-export function AddButton({item}:{item:{id:string;name:string;price:number}}){
+import type {CareLevelId} from "@/lib/data";
+export function AddButton({item,careLevelId}:{item:{id:string;name:string};careLevelId:CareLevelId}){
  const {addItem}=useCart();
- return <button className="table-button" onClick={()=>addItem(item)}>Add to cart</button>;
+ return <button className="table-button" onClick={()=>addItem({kind:"gear",productId:item.id,careLevelId})}>Add to cart</button>;
 }

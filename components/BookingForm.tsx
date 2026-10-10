@@ -1,21 +1,22 @@
 "use client";
 
 import {useState} from "react";
-import {bags,packages,services} from "@/lib/data";
+import {bags,careLevels,packages,services,type CareLevelId} from "@/lib/data";
 import {useCart} from "@/components/CartContext";
 import { supabase } from "@/lib/supabase";
 import {FaCalendarDays,FaCheck,FaMinus,FaPlus,FaWhatsapp} from "react-icons/fa6";
 
-type ServiceType="deep-clean"|"pro-care"|"individual"|"";
+type ServiceType=(typeof packages)[number]["id"]|"individual"|"";
 type CustomerDetails={name:string;mobile:string;email:string;location:string;date:string;notes:string};
 
-const gearOptions=[
-  ...services.map(item=>({...item,displayName:item.name.replace(" — "," ")})),
-  ...bags.map(item=>({...item,displayName:item.name.replace("Kit Bag — ","Kit Bag - ")})),
-];
+const gearOptions=[...services,...bags].map(item=>({...item,displayName:item.description}));
 const serviceOptions=[
-  {id:"deep-clean" as const,name:"Full Kit Deep Clean",price:packages.find(item=>item.id==="deep-clean")!.price,description:"Dirt, stain and odour removal."},
-  {id:"pro-care" as const,name:"Full Kit Pro Care+",price:packages.find(item=>item.id==="pro-care")!.price,description:"Deep cleaning with added care and conditioning."},
+  ...packages.map(item=>({
+    id:item.id,
+    name:`${item.name} · ${item.careLevelName}`,
+    price:item.price,
+    description:"Complete-kit package request",
+  })),
   {id:"individual" as const,name:"Individual Gear",price:null,description:"Select one or more pieces of equipment."},
 ];
 
@@ -27,27 +28,58 @@ function localDateString(){
   return `${year}-${month}-${day}`;
 }
 
-export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:"deep-clean"|"pro-care";fromCart?:boolean}){
-  const {items:cartItems,addItem,updateQty}=useCart();
+function isCareLevelId(value:string):value is CareLevelId {
+  return careLevels.some(level=>level.id===value);
+}
+
+export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:(typeof packages)[number]["id"];fromCart?:boolean}){
+  const {items:cartItems}=useCart();
   const [serviceType,setServiceType]=useState<ServiceType>(initialPackage??"");
+  const [careLevelId,setCareLevelId]=useState<CareLevelId>("fresh");
   const [quantities,setQuantities]=useState<Record<string,number>>({});
   const [customer,setCustomer]=useState<CustomerDetails>({name:"",mobile:"",email:"",location:"",date:"",notes:""});
   const [error,setError]=useState("");
   const [submitted,setSubmitted]=useState(false);
-  const cartPackage=fromCart?packages.find(item=>cartItems.some(cartItem=>cartItem.id===item.id)):undefined;
-  const effectiveServiceType=serviceType||cartPackage?.id||(fromCart&&cartItems.some(cartItem=>gearOptions.some(item=>item.id===cartItem.id))?"individual":"");
+  const effectiveServiceType=fromCart?"cart":serviceType;
   const selectedPackage=packages.find(item=>item.id===effectiveServiceType);
-  const usesCartItems=fromCart&&effectiveServiceType==="individual";
-  const quantityFor=(id:string)=>usesCartItems?cartItems.find(item=>item.id===id)?.qty??0:quantities[id]??0;
-  const selectedGear=effectiveServiceType==="individual"?gearOptions.filter(item=>quantityFor(item.id)>0):[];
-  const serviceName=selectedPackage?.name??(effectiveServiceType==="individual"?"Individual Gear":"Not selected");
-  const total=selectedPackage?.price??selectedGear.reduce<number>((sum,item)=>sum+item.price*quantityFor(item.id),0);
-  const summaryItems:{name:string;quantity:number}[]=selectedPackage?[{name:selectedPackage.name,quantity:cartPackage?.id===selectedPackage.id?cartItems.find(item=>item.id===selectedPackage.id)?.qty??1:1}]:selectedGear.map(item=>({name:item.displayName,quantity:quantityFor(item.id)}));
-  const bookingLines=selectedPackage?[`${selectedPackage.name} × ${summaryItems[0].quantity}`]:selectedGear.map(item=>`${item.displayName} × ${quantityFor(item.id)}`);
+  const selectedCartItems=fromCart?cartItems:[];
+  const quantityFor=(id:string)=>quantities[id]??0;
+  const selectedGear=effectiveServiceType==="individual"
+    ?gearOptions.filter(item=>quantityFor(item.id)>0).map(item=>({
+      ...item,
+      careLevelId,
+      price:item.prices[careLevelId],
+      quantity:quantityFor(item.id),
+    }))
+    :[];
+  const total=fromCart
+    ?cartItems.reduce((sum,item)=>sum+item.price*item.qty,0)
+    :selectedPackage?.price??selectedGear.reduce<number>((sum,item)=>sum+item.price*item.quantity,0);
+  const serviceName=selectedPackage
+    ?`${selectedPackage.name} · ${selectedPackage.careLevelName}`
+    :fromCart?"Launch Enquiry — Gear & Package Selection"
+    :(effectiveServiceType==="individual"?"Individual Gear":"Not selected");
+  const summaryItems:{name:string;quantity:number;includes?:readonly string[]}[]=fromCart
+    ?cartItems.map(item=>({
+      name:`${item.name} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}`,
+      quantity:item.qty,
+      includes:item.kind==="package"?item.includes:undefined,
+    }))
+    :selectedPackage
+      ?[{name:`${selectedPackage.name} · ${selectedPackage.careLevelName}`,quantity:1,includes:selectedPackage.includes}]
+      :selectedGear.map(item=>({
+      name:`${item.displayName} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}`,
+      quantity:item.quantity,
+    }));
+  const bookingLines=fromCart
+    ?cartItems.map(item=>`${item.name} · ${careLevels.find(level=>level.id===item.careLevelId)?.name} × ${item.qty}${item.kind==="package"?` (Includes: ${item.includes.join(", ")})`:""}`)
+    :selectedPackage
+      ?[`${selectedPackage.name} · ${selectedPackage.careLevelName}`]
+      :selectedGear.map(item=>`${item.displayName} · ${careLevels.find(level=>level.id===item.careLevelId)?.name} × ${item.quantity}`);
   const whatsappMessage=[
     "Hi KitKleen,",
     "",
-    "I would like to book a cleaning service.",
+    "I would like to submit a launch enquiry for sports gear care.",
     "",
     "Items:",
     ...(bookingLines.length?bookingLines:["No items selected"]),
@@ -67,15 +99,6 @@ export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:"de
   }
 
   function updateQuantity(id:string,change:number){
-    if(usesCartItems){
-      const currentQuantity=cartItems.find(item=>item.id===id)?.qty??0;
-      const nextQuantity=currentQuantity+change;
-      if(nextQuantity<=0){updateQty(id,0);return;}
-      const gear=gearOptions.find(item=>item.id===id);
-      if(currentQuantity>0){updateQty(id,nextQuantity);return;}
-      if(gear&&change>0)addItem({id:gear.id,name:gear.name,price:gear.price});
-      return;
-    }
     setQuantities(current=>{
       const quantity=Math.max(0,(current[id]??0)+change);
       if(quantity===0){const next={...current};delete next[id];return next;}
@@ -87,12 +110,17 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
   setError("");
 
-  if (effectiveServiceType === "individual" && !selectedGear.length) {
+  if (fromCart && !selectedCartItems.length) {
+    setError("Your request is empty. Return to Services and add an item before continuing.");
+    return;
+  }
+
+  if (!fromCart && effectiveServiceType === "individual" && !selectedGear.length) {
     setError("Select at least one gear item to continue.");
     return;
   }
 
-  if (effectiveServiceType !== "individual" && !selectedPackage) {
+  if (!fromCart && effectiveServiceType !== "individual" && !selectedPackage) {
     setError("Choose a service type to continue.");
     return;
   }
@@ -138,23 +166,29 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
   unit_price: number;
   total_price: number;
     };
-    const bookingItems: BookingItemInsert[] = selectedPackage
-      ? [
+    const bookingItems: BookingItemInsert[] = fromCart
+      ? selectedCartItems.map(item=>({
+          booking_id:bookingId,
+          item_name:`${item.name} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}${item.kind==="package"?` (Includes: ${item.includes.join(", ")})`:""}`,
+          quantity:item.qty,
+          unit_price:item.price,
+          total_price:item.price*item.qty,
+        }))
+      : selectedPackage
+        ? [
           {
             booking_id: bookingId,
-            item_name: selectedPackage.name,
-            quantity: summaryItems[0]?.quantity ?? 1,
+            item_name: `${selectedPackage.name} · ${selectedPackage.careLevelName} (Includes: ${selectedPackage.includes.join(", ")})`,
+            quantity: 1,
             unit_price: selectedPackage.price,
-            total_price:
-              selectedPackage.price * (summaryItems[0]?.quantity ?? 1),
+            total_price: selectedPackage.price,
           },
         ]
-      : selectedGear.map((item) => {
-          const quantity = quantityFor(item.id);
-
+        : selectedGear.map((item) => {
+          const quantity = item.quantity;
           return {
             booking_id: bookingId,
-            item_name: item.displayName,
+            item_name: `${item.displayName} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}`,
             quantity,
             unit_price: item.price,
             total_price: item.price * quantity,
@@ -186,10 +220,10 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
     <div className="booking-form-column">
       {submitted?<section className="booking-success" role="status">
         <span className="booking-success-icon"><FaCheck aria-hidden="true"/></span>
-        <div className="eyebrow">Request captured</div>
-        <h2>Thanks! Your booking request has been captured.</h2>
-        <p>To confirm your booking quickly, you can continue on WhatsApp.</p>
-        <a className="btn btn-primary booking-whatsapp" href={whatsappUrl} target="_blank" rel="noreferrer"><FaWhatsapp aria-hidden="true"/> Chat on WhatsApp <span aria-hidden="true">→</span></a>
+        <div className="eyebrow">Enquiry captured</div>
+        <h2>Thanks! Your care enquiry has been captured.</h2>
+        <p>KitKleen is coming soon to Hyderabad. You can continue on WhatsApp to discuss your enquiry and launch timing.</p>
+        <a className="btn btn-primary booking-whatsapp" href={whatsappUrl} target="_blank" rel="noreferrer"><FaWhatsapp aria-hidden="true"/> Continue on WhatsApp <span aria-hidden="true">→</span></a>
       </section>:<form className="booking-form" onSubmit={submitBooking}>
         <section className="booking-form-section">
           <div className="booking-section-heading"><span>01</span><div><div className="eyebrow">Your details</div><h2>Customer Details</h2></div></div>
@@ -202,28 +236,44 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
         </section>
 
         <section className="booking-form-section">
-          <div className="booking-section-heading"><span>02</span><div><div className="eyebrow">Choose your care</div><h2>Service Type</h2></div></div>
-          <fieldset className="booking-service-options"><legend className="visually-hidden">Select a service type</legend>
+          <div className="booking-section-heading"><span>02</span><div><div className="eyebrow">{fromCart?"Review your selection":"Choose your care"}</div><h2>{fromCart?"Selected Services":"Service Type"}</h2></div></div>
+          {!fromCart&&<fieldset className="booking-service-options"><legend className="visually-hidden">Select a service type</legend>
             {serviceOptions.map(option=><label className={`booking-service-option ${effectiveServiceType===option.id?"is-selected":""}`} key={option.id}>
               <input type="radio" name="serviceType" value={option.id} required checked={effectiveServiceType===option.id} onChange={()=>{setServiceType(option.id);setError("");}}/>
               <span className="service-radio-indicator" aria-hidden="true"/>
               <span className="booking-service-copy"><strong>{option.name}</strong><small>{option.description}</small></span>
               {option.price!==null&&<strong className="booking-service-price">₹{option.price}</strong>}
             </label>)}
-          </fieldset>
-          {effectiveServiceType==="individual"&&<div className="booking-gear-picker">
-            <div className="booking-gear-heading"><h3>Select your gear</h3><span>Choose multiple items</span></div>
-            <div className="booking-gear-list">{gearOptions.map(item=>{
-              const quantity=quantityFor(item.id);
-              return <div className={`booking-gear-row ${quantity?"has-quantity":""}`} key={item.id}>
-                <div className="booking-gear-name"><strong>{item.displayName}</strong><small>₹{item.price} each</small></div>
-                <div className="booking-quantity" aria-label={`${item.displayName} quantity`}>
-                  <button type="button" onClick={()=>updateQuantity(item.id,-1)} disabled={quantity===0} aria-label={`Remove one ${item.displayName}`}><FaMinus aria-hidden="true"/></button>
-                  <output aria-live="polite">{quantity}</output>
-                  <button type="button" onClick={()=>updateQuantity(item.id,1)} aria-label={`Add one ${item.displayName}`}><FaPlus aria-hidden="true"/></button>
-                </div>
-              </div>;
-            })}</div>
+          </fieldset>}
+          {fromCart&&<div className="booking-gear-picker">
+            <div className="booking-gear-heading"><h3>Request items</h3><a href="/cart">Edit request</a></div>
+            {selectedCartItems.map(item=><div className="booking-gear-row has-quantity" key={item.id}>
+              <div className="booking-gear-name">
+                <strong>{item.name} · {careLevels.find(level=>level.id===item.careLevelId)?.name}</strong>
+                <small>₹{item.price} each · Quantity {item.qty}</small>
+                {item.kind==="package"&&<small>Includes: {item.includes.join(", ")}</small>}
+              </div>
+              <strong>₹{item.price*item.qty}</strong>
+            </div>)}
+          </div>}
+          {!fromCart&&effectiveServiceType==="individual"&&<div className="booking-gear-picker">
+                <label className="booking-care-level">Care level
+                  <select value={careLevelId} onChange={event=>{if(isCareLevelId(event.target.value))setCareLevelId(event.target.value);}}>
+                    {careLevels.map(level=><option key={level.id} value={level.id}>{level.name} — {level.subtitle}</option>)}
+                  </select>
+                </label>
+                <div className="booking-gear-heading"><h3>Select your gear</h3><span>Choose multiple items</span></div>
+                <div className="booking-gear-list">{gearOptions.map(item=>{
+                  const quantity=quantityFor(item.id);
+                  return <div className={`booking-gear-row ${quantity?"has-quantity":""}`} key={item.id}>
+                    <div className="booking-gear-name"><strong>{item.displayName}</strong><small>₹{item.prices[careLevelId]} each · {careLevels.find(level=>level.id===careLevelId)?.name}</small></div>
+                    <div className="booking-quantity" aria-label={`${item.displayName} quantity`}>
+                      <button type="button" onClick={()=>updateQuantity(item.id,-1)} disabled={quantity===0} aria-label={`Remove one ${item.displayName}`}><FaMinus aria-hidden="true"/></button>
+                      <output aria-live="polite">{quantity}</output>
+                      <button type="button" onClick={()=>updateQuantity(item.id,1)} aria-label={`Add one ${item.displayName}`}><FaPlus aria-hidden="true"/></button>
+                    </div>
+                  </div>;
+                })}</div>
           </div>}
         </section>
 
@@ -235,7 +285,7 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
           </div>
         </section>
         {error&&<p className="booking-error" role="alert">{error}</p>}
-        <button className="btn btn-primary booking-submit" type="submit">Book Now <span aria-hidden="true">→</span></button>
+        <button className="btn btn-primary booking-submit" type="submit">Send Care Enquiry <span aria-hidden="true">→</span></button>
       </form>}
     </div>
 
@@ -244,7 +294,7 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
       <div className="eyebrow">Review before you send</div><h2>Booking Summary</h2>
       <dl>
         <div><dt>Service</dt><dd>{serviceName}</dd></div>
-        <div><dt>Selected gear</dt><dd>{summaryItems.length?summaryItems.map(item=><span className="booking-summary-item" key={item.name}>{item.name}</span>):"No items selected"}</dd></div>
+        <div><dt>Selected gear</dt><dd>{summaryItems.length?summaryItems.map(item=><span className="booking-summary-item" key={item.name}>{item.name}{item.includes&&<small className="booking-summary-includes">Includes: {item.includes.join(", ")}</small>}</span>):"No items selected"}</dd></div>
         <div><dt>Quantity</dt><dd>{summaryItems.length?summaryItems.map(item=><span className="booking-summary-item" key={item.name}>{item.quantity} {item.quantity===1?"item":"items"}</span>):"—"}</dd></div>
         <div><dt>Preferred date</dt><dd>{customer.date||"Not selected"}</dd></div>
       </dl>

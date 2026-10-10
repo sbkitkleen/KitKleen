@@ -461,10 +461,23 @@ function DashboardStyles() {
       .loading-panel strong { color: #17384B; font-size: 12px; }
       .loading-panel div span { color: #81908B; font-size: 9px; }
       .loading-spinner { width: 23px; height: 23px; border: 2px solid #DCE9E3; border-top-color: #28757B; border-radius: 50%; animation: admin-spin .8s linear infinite; }
+      .page-kicker, .section-kicker { font-size: var(--type-caption); }
+      .admin-brand-title, .queue-indicator, .error-panel span, .metric-note, .bookings-heading p, .booking-count, .booking-id, .customer-phone, .service-location, .status-badge, .panel-footer, .admin-footer, .loading-panel div span { font-size: var(--type-caption); line-height: 1.45; }
+      .admin-account-email, .logout-button, .page-heading p, .error-panel strong, .metric-topline, .bookings-table th, .bookings-table td, .customer-name, .service-name, .row-actions .view-button, .empty-state p, .loading-panel strong { font-size: var(--type-secondary); line-height: 1.45; }
+      .search-control input, .filter-control select { font-size: var(--type-control); }
+      .logout-button, .search-control, .filter-control, .view-button { min-height: 40px; }
+      .bookings-table th { font-size: var(--type-caption); }
+      .metric-topline { letter-spacing: .04em; }
+      .status-badge { padding: 6px 9px; }
+      .row-actions .view-button { padding-inline: 10px; }
+      .whatsapp-button { min-width: 40px; min-height: 40px; }
+      .empty-state p { max-width: 420px; }
+      .panel-footer, .admin-footer { color: #71817D; }
       @keyframes admin-spin { to { transform: rotate(360deg); } }
       @media (min-width: 1180px) { .metrics-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
       @media (max-width: 820px) { .admin-header-inner, .admin-content { width: calc(100% - 36px); } .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .page-heading h1 { font-size: 31px; } }
       @media (max-width: 600px) { .admin-header-inner { min-height: 0; align-items: flex-start; flex-direction: column; gap: 12px; padding: 14px 0; } .admin-account { width: 100%; } .admin-account-email { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .admin-content { width: calc(100% - 28px); padding-top: 22px; } .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 16px; } .page-heading h1 { font-size: 29px; } .page-heading p { max-width: 420px; font-size: 11px; } .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 15px; } .metric-card { padding: 11px; } .metric-topline { font-size: 7px; } .metric-icon { width: 24px; height: 24px; flex-basis: 24px; font-size: 10px; } .metric-value { margin-top: 7px; font-size: 25px; } .metric-card:last-child .metric-value { font-size: 22px; } .metric-note { font-size: 8px; } .bookings-panel-header { align-items: flex-start; padding: 15px 13px 12px; } .bookings-heading h2 { font-size: 23px; } .bookings-heading p { max-width: 245px; font-size: 9px; line-height: 1.5; } .booking-count { padding-top: 3px; font-size: 8px; } .booking-tools { flex-direction: column; padding: 11px 13px; } .search-control, .filter-control { width: 100%; height: 38px; } .bookings-table { min-width: 850px; } .bookings-table th:first-child, .bookings-table td:first-child { padding-left: 13px; } .bookings-table th, .bookings-table td { padding-inline: 10px; } .panel-footer { padding-inline: 13px; font-size: 7px; } .admin-footer { font-size: 8px; } }
+      @media (max-width: 600px) { .page-heading p { font-size: var(--type-secondary); } .metric-topline { font-size: var(--type-caption); } .metric-note, .bookings-heading p, .booking-count, .panel-footer, .admin-footer { font-size: var(--type-caption); } .metric-card { min-height: 112px; } .panel-footer { flex-wrap: wrap; } }
       @media (prefers-reduced-motion: reduce) { .loading-spinner { animation-duration: 2s; } .admin-page, .admin-page *, .admin-page *::before, .admin-page *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
     `}</style>
   );

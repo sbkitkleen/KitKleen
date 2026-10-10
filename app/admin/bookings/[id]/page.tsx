@@ -207,6 +207,14 @@ export default function BookingDetailPage({params}:{params:Promise<{id:string}>}
     @media(max-width:760px){.detail-page{padding-inline:16px}.detail-grid{grid-template-columns:1fr}.status-card,.service-card,.booking-info-card{grid-column:1;grid-row:auto}.status-card{grid-row:1}.customer-card{grid-row:2}.service-card{grid-row:3}.booking-info-card{grid-row:4}}
     @media(max-width:520px){.detail-page{padding-inline:12px}.detail-header{min-height:68px}.detail-brand img{width:35px;height:35px}.detail-brand span{font-size:17px}.back-link{padding:8px 9px;font-size:9px}.detail-title{align-items:flex-start;flex-direction:column;padding:22px 0 16px}.detail-title h1{font-size:32px}.detail-card{padding:15px}.customer-details{grid-template-columns:1fr;gap:13px}.booking-info-grid{grid-template-columns:1fr 1fr}.items-table{min-width:430px}.customer-actions{flex-wrap:wrap}.whatsapp-link,.email-link{flex:1}.detail-state{min-height:calc(100vh - 68px)}}
     @media(prefers-reduced-motion:reduce){.detail-spinner{animation-duration:2s}}
+    .detail-page{font-size:var(--type-body);line-height:1.6}
+    .detail-brand strong,.detail-eyebrow,.card-kicker,.detail-field>span,.notes-field>span,.status-feedback,.status-technical,.detail-state small{font-size:var(--type-caption);line-height:1.45}
+    .back-link,.detail-title p,.detail-field strong,.detail-field a,.status-select-label,.status-select,.status-pill,.service-summary span,.service-summary strong,.items-table th,.items-table td,.notes-field p,.detail-state strong,.detail-state a{font-size:var(--type-secondary);line-height:1.5}
+    .back-link,.status-select,.update-status-button,.whatsapp-link,.email-link{min-height:44px}
+    .status-select,.update-status-button{font-size:var(--type-control)}
+    .status-pill{white-space:normal}
+    .items-table th{font-size:var(--type-caption)}
+    @media(max-width:520px){.back-link{font-size:var(--type-control)}}
   `}</style>
   </main>;
 }

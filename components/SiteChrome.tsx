@@ -44,7 +44,7 @@ export function SiteFooter() {
           <button type="button" disabled title="Official YouTube profile not configured" aria-label="YouTube profile not configured"><FaYoutube aria-hidden="true"/></button>
         </div>
       </div>
-      <div><h4>Explore</h4><Link href="/services">Services</Link><Link href="/pricing">Pricing</Link><Link href="/subscriptions">Subscriptions</Link><Link href="/offers">Offers</Link></div>
+      <div><h4>Explore</h4><Link href="/services">Services</Link><Link href="/subscriptions">Subscriptions</Link><Link href="/offers">Offers</Link></div>
       <div><h4>KitKleen</h4><Link href="/about">About Us</Link><Link href="/faq">FAQ</Link><Link href="/contact">Contact</Link><Link href="/login">Login / Create Account</Link></div>
       <div className="footer-contact"><h4>Get in Touch</h4><a href="mailto:sbkitkleen@gmail.com"><FaEnvelope aria-hidden="true"/><span>sbkitkleen@gmail.com</span></a><a href="tel:+918978371100"><FaPhone aria-hidden="true"/><span>+91 89783 71100</span></a><a href="https://wa.me/918978371100?text=Hi%20KitKleen%2C%20I%20would%20like%20to%20know%20more%20about%20your%20sports%20gear%20cleaning%20services." target="_blank" rel="noreferrer"><FaWhatsapp aria-hidden="true"/><span>Chat on WhatsApp →</span></a></div>
     </div>
