@@ -159,7 +159,7 @@ export default function AdminLoginPage() {
  
         .admin-login-brand h1 { 
           margin: 10px 0 7px; 
-          font-size: 30px; 
+          font-size: 28px;
           line-height: 1.1; 
           font-weight: 900; 
           letter-spacing: -0.5px; 

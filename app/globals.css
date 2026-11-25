@@ -980,6 +980,16 @@ html{scroll-padding-top:82px}body{background:var(--cream)}
   --type-caption: 13px;
 }
 
+/* Keep the larger admin type scale scoped away from customer-facing pages. */
+.admin-page,
+.detail-page,
+.admin-login-page {
+  --type-body: 16px;
+  --type-secondary: 15px;
+  --type-control: 15px;
+  --type-caption: 14px;
+}
+
 body {
   font-size: var(--type-body);
   line-height: 1.6;
