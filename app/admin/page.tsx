@@ -368,7 +368,7 @@ function StatusBadge({ status }: { status: string }) {
 function DashboardStyles() {
   return (
     <style jsx global>{`
-      .admin-page { min-height: 100vh; background: #F3F7F5; color: #17384B; font-family: "DM Sans", Arial, sans-serif; }
+      .admin-page { --type-body: 16px; --type-secondary: 15px; --type-control: 15px; --type-caption: 14px; min-height: 100vh; background: #F3F7F5; color: #17384B; font-family: "DM Sans", Arial, sans-serif; font-size: var(--type-body); line-height: 1.55; }
       .admin-header { background: #fff; border-bottom: 1px solid #D7E2DE; }
       .admin-header-inner { width: min(1380px, calc(100% - 56px)); min-height: 78px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
       .admin-brand-block { display: flex; align-items: center; gap: 11px; }
@@ -384,7 +384,7 @@ function DashboardStyles() {
       .logout-button:hover { border-color: #28757B; background: #F4F8F6; }
       .admin-content { width: min(1380px, calc(100% - 56px)); margin: 0 auto; padding: 31px 0 25px; }
       .page-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 22px; }
-      .page-heading h1 { margin: 7px 0 6px; color: #17384B; font: 700 34px/.98 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; }
+      .page-heading h1 { margin: 7px 0 6px; color: #17384B; font: 700 28px/1.1 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; }
       .page-heading p { margin: 0; color: #63777A; font-size: 12px; line-height: 1.6; }
       .queue-indicator { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid #D7E2DE; border-radius: 5px; background: #fff; color: #5E7377; font-size: 9px; white-space: nowrap; }
       .queue-indicator span { width: 7px; height: 7px; border-radius: 50%; background: #A9D83B; box-shadow: 0 0 0 3px #EFF6E1; }
@@ -406,10 +406,10 @@ function DashboardStyles() {
       .metric-card:last-child .metric-value { font-size: clamp(21px, 1.8vw, 27px); }
       .bookings-panel { overflow: hidden; border: 1px solid #D7E2DE; border-radius: 8px; background: #fff; box-shadow: 0 5px 18px rgba(23,56,75,.035); }
       .bookings-panel-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 19px 20px 16px; border-bottom: 1px solid #E6EDEA; }
-      .bookings-heading h2 { margin: 5px 0 4px; color: #17384B; font: 700 25px/1 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; }
+      .bookings-heading h2 { margin: 5px 0 4px; color: #17384B; font: 700 20px/1.25 "Barlow Condensed", Impact, sans-serif; text-transform: uppercase; }
       .bookings-heading p { margin: 0; color: #74827F; font-size: 10px; }
       .booking-count { color: #82908C; font-size: 9px; white-space: nowrap; }
-      .booking-count strong { color: #28757B; font-size: 12px; }
+      .booking-count strong { color: #28757B; font-size: var(--type-secondary); }
       .booking-tools { display: flex; gap: 9px; padding: 13px 20px; border-bottom: 1px solid #E6EDEA; background: #FCFDFC; }
       .search-control, .filter-control { height: 36px; display: flex; align-items: center; gap: 9px; padding: 0 10px; border: 1px solid #D7E2DE; border-radius: 4px; background: #fff; color: #73827E; }
       .search-control { flex: 1; }
@@ -478,8 +478,8 @@ function DashboardStyles() {
       .panel-footer, .admin-footer { color: #71817D; }
       @keyframes admin-spin { to { transform: rotate(360deg); } }
       @media (min-width: 1180px) { .metrics-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
-      @media (max-width: 820px) { .admin-header-inner, .admin-content { width: calc(100% - 36px); } .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .page-heading h1 { font-size: 31px; } }
-      @media (max-width: 600px) { .admin-header-inner { min-height: 0; align-items: flex-start; flex-direction: column; gap: 12px; padding: 14px 0; } .admin-account { width: 100%; } .admin-account-email { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .admin-content { width: calc(100% - 28px); padding-top: 22px; } .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 16px; } .page-heading h1 { font-size: 29px; } .page-heading p { max-width: 420px; font-size: 11px; } .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 15px; } .metric-card { padding: 11px; } .metric-topline { font-size: 7px; } .metric-icon { width: 24px; height: 24px; flex-basis: 24px; font-size: 10px; } .metric-value { margin-top: 7px; font-size: 25px; } .metric-card:last-child .metric-value { font-size: 22px; } .metric-note { font-size: 8px; } .bookings-panel-header { align-items: flex-start; padding: 15px 13px 12px; } .bookings-heading h2 { font-size: 23px; } .bookings-heading p { max-width: 245px; font-size: 9px; line-height: 1.5; } .booking-count { padding-top: 3px; font-size: 8px; } .booking-tools { flex-direction: column; padding: 11px 13px; } .search-control, .filter-control { width: 100%; height: 38px; } .bookings-table { min-width: 850px; } .bookings-table th:first-child, .bookings-table td:first-child { padding-left: 13px; } .bookings-table th, .bookings-table td { padding-inline: 10px; } .panel-footer { padding-inline: 13px; font-size: 7px; } .admin-footer { font-size: 8px; } }
+      @media (max-width: 820px) { .admin-header-inner, .admin-content { width: calc(100% - 36px); } .metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .page-heading h1 { font-size: 28px; } }
+      @media (max-width: 600px) { .admin-header-inner { min-height: 0; align-items: flex-start; flex-direction: column; gap: 12px; padding: 14px 0; } .admin-account { width: 100%; } .admin-account-email { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .admin-content { width: calc(100% - 28px); padding-top: 22px; } .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 16px; } .page-heading h1 { font-size: 28px; } .page-heading p { max-width: 420px; } .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 15px; } .metric-card { padding: 11px; } .metric-icon { width: 24px; height: 24px; flex-basis: 24px; } .metric-value { margin-top: 7px; font-size: 25px; } .metric-card:last-child .metric-value { font-size: 22px; } .bookings-panel-header { align-items: flex-start; padding: 15px 13px 12px; } .booking-tools { flex-direction: column; padding: 11px 13px; } .search-control, .filter-control { width: 100%; min-height: 44px; } .bookings-table { min-width: 850px; } .bookings-table th:first-child, .bookings-table td:first-child { padding-left: 13px; } .bookings-table th, .bookings-table td { padding-inline: 10px; } .panel-footer { padding-inline: 13px; } }
       @media (max-width: 600px) { .page-heading p { font-size: var(--type-secondary); } .metric-topline { font-size: var(--type-caption); } .metric-note, .bookings-heading p, .booking-count, .panel-footer, .admin-footer { font-size: var(--type-caption); } .metric-card { min-height: 112px; } .panel-footer { flex-wrap: wrap; } }
       @media (prefers-reduced-motion: reduce) { .loading-spinner { animation-duration: 2s; } .admin-page, .admin-page *, .admin-page *::before, .admin-page *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
     `}</style>

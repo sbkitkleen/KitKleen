@@ -119,6 +119,10 @@ export default function AdminLoginPage() {
  
       <style jsx>{` 
         .admin-login-page { 
+          --type-body: 16px;
+          --type-secondary: 15px;
+          --type-control: 15px;
+          --type-caption: 14px;
           min-height: calc(100vh - 82px); 
           background: #f3f7f5; 
           display: flex; 
@@ -159,7 +163,7 @@ export default function AdminLoginPage() {
  
         .admin-login-brand h1 { 
           margin: 10px 0 7px; 
-          font-size: 30px; 
+          font-size: 28px;
           line-height: 1.1; 
           font-weight: 900; 
           letter-spacing: -0.5px; 

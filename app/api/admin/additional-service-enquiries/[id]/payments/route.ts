@@ -73,5 +73,63 @@ export async function POST(
           : "The payment could not be recorded.";
     return Response.json({ error: message }, { status: error.code === "P0002" ? 404 : 400 });
   }
-  return Response.json({ payment: data }, { headers: { "Cache-Control": "no-store" } });
+
+  const recordedPayment = Array.isArray(data) ? data[0] : null;
+  if (
+    !recordedPayment ||
+    typeof recordedPayment.payment_id !== "string" ||
+    typeof recordedPayment.enquiry_payment_status !== "string"
+  ) {
+    console.error("Additional enquiry payment recording returned an unexpected result.");
+    return Response.json({ error: "The payment could not be confirmed as recorded." }, { status: 500 });
+  }
+
+  const [{ data: enquiry, error: enquiryError }, { data: payments, error: paymentsError }] =
+    await Promise.all([
+      supabase
+        .from("additional_service_enquiries")
+        .select("amount_due_inr, payment_status")
+        .eq("id", id)
+        .maybeSingle(),
+      supabase
+        .from("additional_service_enquiry_payments")
+        .select("id, amount_inr, payment_method, payment_reference, verified_at")
+        .eq("enquiry_id", id)
+        .order("created_at", { ascending: false }),
+    ]);
+
+  if (enquiryError || paymentsError || !enquiry) {
+    console.error(
+      "Additional enquiry payment refresh failed:",
+      enquiryError?.code,
+      paymentsError?.code
+    );
+    return Response.json(
+      {
+        recorded: true,
+        payment: {
+          id: recordedPayment.payment_id,
+          status: recordedPayment.enquiry_payment_status,
+        },
+        refreshWarning: "Payment recorded, but the latest balance could not be loaded. Refresh the page to see current details.",
+      },
+      { headers: { "Cache-Control": "no-store" } }
+    );
+  }
+
+  return Response.json(
+    {
+      recorded: true,
+      payment: {
+        id: recordedPayment.payment_id,
+        status: recordedPayment.enquiry_payment_status,
+      },
+      enquiry: {
+        amount_due_inr: enquiry.amount_due_inr,
+        payment_status: enquiry.payment_status,
+        payments: payments ?? [],
+      },
+    },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -23,6 +23,8 @@ type WorkflowUpdate = Pick<
   "enquiry_status" | "order_status" | "payment_status" | "amount_due_inr" | "updated_at"
 >;
 
+type PaymentUpdate = Pick<AdminEnquiry, "payment_status" | "amount_due_inr" | "payments">;
+
 export type AdminEnquiry = {
   id: string;
   enquiry_reference: string;
@@ -40,6 +42,13 @@ export type AdminEnquiry = {
   updated_at: string;
   payments: PaymentRecord[];
   attachments: Attachment[];
+};
+
+type RecordedPaymentResponse = {
+  recorded: true;
+  payment: { id: string; status: string };
+  enquiry?: PaymentUpdate;
+  refreshWarning?: string;
 };
 
 const enquiryStatuses = [
@@ -76,6 +85,34 @@ function isWorkflowUpdate(value: unknown): value is WorkflowUpdate {
     typeof update.updated_at === "string";
 }
 
+function isPaymentUpdate(value: unknown): value is PaymentUpdate {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const update = value as Record<string, unknown>;
+  return (update.amount_due_inr === null || typeof update.amount_due_inr === "number") &&
+    typeof update.payment_status === "string" &&
+    Array.isArray(update.payments) &&
+    update.payments.every((payment) => {
+      if (!payment || typeof payment !== "object" || Array.isArray(payment)) return false;
+      const record = payment as Record<string, unknown>;
+      return typeof record.id === "string" &&
+        typeof record.amount_inr === "number" &&
+        typeof record.payment_method === "string" &&
+        typeof record.payment_reference === "string" &&
+        typeof record.verified_at === "string";
+    });
+}
+
+function isRecordedPaymentResponse(value: unknown): value is RecordedPaymentResponse {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const result = value as Record<string, unknown>;
+  if (result.recorded !== true || !result.payment || typeof result.payment !== "object") return false;
+  const payment = result.payment as Record<string, unknown>;
+  return typeof payment.id === "string" &&
+    typeof payment.status === "string" &&
+    (result.enquiry === undefined || isPaymentUpdate(result.enquiry)) &&
+    (result.refreshWarning === undefined || typeof result.refreshWarning === "string");
+}
+
 function formatDate(value: string) {
   return new Date(value).toLocaleString("en-IN", {
     day: "2-digit",
@@ -94,12 +131,17 @@ function displayDetail(value: unknown) {
 }
 
 function EnquiryCard({
-  enquiry,
+  baseEnquiry,
+  update,
   onUpdated,
+  onPaymentUpdated,
 }: {
-  enquiry: AdminEnquiry;
+  baseEnquiry: AdminEnquiry;
+  update?: Partial<AdminEnquiry>;
   onUpdated: (updated: WorkflowUpdate) => void;
+  onPaymentUpdated: (updated: PaymentUpdate) => void;
 }) {
+  const enquiry = useMemo(() => ({ ...baseEnquiry, ...update }), [baseEnquiry, update]);
   const router = useRouter();
   const [enquiryStatus, setEnquiryStatus] = useState(enquiry.enquiry_status);
   const [orderStatus, setOrderStatus] = useState(enquiry.order_status);
@@ -109,6 +151,15 @@ function EnquiryCard({
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [paymentError, setPaymentError] = useState("");
+  const paymentInFlight = useRef(false);
+  const [previousEnquiry, setPreviousEnquiry] = useState(enquiry);
+
+  if (previousEnquiry !== enquiry) {
+    setPreviousEnquiry(enquiry);
+    setEnquiryStatus(enquiry.enquiry_status);
+    setOrderStatus(enquiry.order_status);
+    setAmountDue(enquiry.amount_due_inr === null ? "" : String(enquiry.amount_due_inr));
+  }
 
   async function saveWorkflow(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -131,6 +182,9 @@ function EnquiryCard({
         throw new Error(message);
       }
       onUpdated(result);
+      setEnquiryStatus(result.enquiry_status);
+      setOrderStatus(result.order_status);
+      setAmountDue(result.amount_due_inr === null ? "" : String(result.amount_due_inr));
       setNotice("Enquiry updated.");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "The enquiry could not be updated.");
@@ -141,7 +195,10 @@ function EnquiryCard({
 
   async function recordPayment(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (paymentInFlight.current) return;
+    paymentInFlight.current = true;
     setBusy(true);
+    setNotice("");
     setPaymentError("");
     const formData = new FormData(event.currentTarget);
     try {
@@ -161,14 +218,26 @@ function EnquiryCard({
           typeof result.error === "string" ? result.error : "The payment could not be recorded.";
         throw new Error(message);
       }
-      setNotice("Verified payment recorded.");
+      if (!isRecordedPaymentResponse(result)) {
+        throw new Error("The payment could not be confirmed as recorded. Refresh the page to check its status.");
+      }
+      if (result.enquiry) onPaymentUpdated(result.enquiry);
+      setPaymentError("");
+      setNotice(result.refreshWarning ?? "Verified payment recorded.");
       router.refresh();
     } catch (error) {
+      setNotice("");
       setPaymentError(error instanceof Error ? error.message : "The payment could not be recorded.");
     } finally {
+      paymentInFlight.current = false;
       setBusy(false);
     }
   }
+
+  const totalPaid = enquiry.payments.reduce((total, payment) => total + payment.amount_inr, 0);
+  const remainingBalance = enquiry.amount_due_inr === null
+    ? null
+    : Math.max(0, enquiry.amount_due_inr - totalPaid);
 
   return (
     <article className="additional-admin-card">
@@ -258,6 +327,13 @@ function EnquiryCard({
             ))}
           </ul>
         )}
+        {enquiry.payments.length === 0 && (
+          <p className="additional-admin-payments-empty">No verified payments recorded.</p>
+        )}
+        <p className="additional-admin-balance">
+          <strong>Remaining balance:</strong>{" "}
+          {remainingBalance === null ? "Pending amount confirmation" : `₹${remainingBalance}`}
+        </p>
         {enquiry.amount_due_inr !== null && enquiry.amount_due_inr > 0 && enquiry.payment_status !== "paid" && (
           <form className="additional-admin-payment-form" onSubmit={recordPayment}>
             <strong>Record a verified payment</strong>
@@ -311,12 +387,20 @@ export function AdminAdditionalEnquiries({
   initialEnquiries: AdminEnquiry[];
   adminEmail: string;
 }) {
-  const [enquiries, setEnquiries] = useState(initialEnquiries);
+  const [localUpdates, setLocalUpdates] = useState<{
+    source: AdminEnquiry[];
+    values: Map<string, Partial<AdminEnquiry>>;
+  }>(() => ({ source: initialEnquiries, values: new Map() }));
+  const updates = localUpdates.source === initialEnquiries ? localUpdates.values : undefined;
 
-  function updateEnquiry(id: string, update: WorkflowUpdate) {
-    setEnquiries((current) =>
-      current.map((enquiry) => enquiry.id === id ? { ...enquiry, ...update } : enquiry)
-    );
+  function updateEnquiry(id: string, update: Partial<AdminEnquiry>) {
+    setLocalUpdates((current) => {
+      const values = current.source === initialEnquiries
+        ? new Map(current.values)
+        : new Map<string, Partial<AdminEnquiry>>();
+      values.set(id, { ...values.get(id), ...update });
+      return { source: initialEnquiries, values };
+    });
   }
 
   return (
@@ -340,20 +424,22 @@ export function AdminAdditionalEnquiries({
             <h1>Additional Services</h1>
             <p>Repair, cricket ball and jersey enquiries are stored separately from cleaning bookings.</p>
           </div>
-          <span className="queue-indicator"><span /> {enquiries.length} enquiries shown</span>
+          <span className="queue-indicator"><span /> {initialEnquiries.length} enquiries shown</span>
         </section>
-        {enquiries.length === 0 ? (
+        {initialEnquiries.length === 0 ? (
           <section className="bookings-panel empty-state">
             <h3>No additional enquiries yet</h3>
             <p>Submitted enquiries will appear here after the approved database setup is applied.</p>
           </section>
         ) : (
           <section className="additional-admin-list" aria-label="Additional service enquiries">
-            {enquiries.map((enquiry) => (
+            {initialEnquiries.map((enquiry) => (
               <EnquiryCard
                 key={enquiry.id}
-                enquiry={enquiry}
+                baseEnquiry={enquiry}
+                update={updates?.get(enquiry.id)}
                 onUpdated={(update) => updateEnquiry(enquiry.id, update)}
+                onPaymentUpdated={(update) => updateEnquiry(enquiry.id, update)}
               />
             ))}
           </section>
