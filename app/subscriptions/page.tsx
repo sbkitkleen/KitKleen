@@ -71,15 +71,6 @@ const planningSteps = [
   },
 ];
 
-function membershipInterestLink(membership: string) {
-  const subject = encodeURIComponent(`Membership interest: ${membership}`);
-  const body = encodeURIComponent(
-    `Hello KitKleen,\n\nI am interested in the ${membership} membership option. Please let me know when plans are finalised.\n\nThis is an expression of interest only, not a confirmed subscription or service booking.`
-  );
-
-  return `mailto:info@kitkleen.in?subject=${subject}&body=${body}`;
-}
-
 export default function Subscriptions() {
   return (
     <main>
@@ -110,8 +101,8 @@ export default function Subscriptions() {
             </Link>
           </div>
           <p className="membership-enquiry-note">
-            Interest links open an email draft with your selected option. Your
-            interest is not registered until you send it.
+            Submit an enquiry as a guest; no account or OTP is needed. Enquiries
+            are expressions of interest, not confirmed subscriptions.
           </p>
         </div>
       </section>
@@ -154,19 +145,18 @@ export default function Subscriptions() {
                     ))}
                   </ul>
                 </div>
-                <a
+                <Link
                   className="btn btn-secondary"
-                  href={membershipInterestLink(membership.name)}
+                  href={`/membership/enquiry?plan=${membership.id}`}
                 >
                   {membership.cta}
-                </a>
+                </Link>
               </article>
             ))}
           </div>
           <p className="membership-enquiry-note">
-            The interest email identifies your selected option in its subject.
-            No OTP is collected or verified through this email link; a verified
-            membership enquiry flow is not available yet.
+            Submit an enquiry as a guest; no account or OTP is needed. Membership
+            plans are still being finalised and are not available for purchase.
           </p>
         </div>
       </section>

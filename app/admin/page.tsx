@@ -224,6 +224,7 @@ export default function AdminDashboard() {
           </div>
           <div className="admin-heading-actions">
             <Link className="view-button" href="/admin/additional-enquiries">Additional service enquiries</Link>
+            <Link className="view-button" href="/admin/membership-enquiries">Membership enquiries</Link>
             <div className="queue-indicator"><span /> Live booking queue</div>
           </div>
         </section>
