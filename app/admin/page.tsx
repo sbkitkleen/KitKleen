@@ -115,6 +115,11 @@ export default function AdminDashboard() {
         return;
       }
 
+      if (user.app_metadata?.role !== "admin") {
+        router.replace("/admin/login");
+        return;
+      }
+
       if (user.email) setAdminEmail(user.email);
 
       const { data, error } = await supabase
@@ -217,7 +222,10 @@ export default function AdminDashboard() {
             <h1>Booking Operations</h1>
             <p>Review incoming gear-care requests, track service progress and manage customer bookings.</p>
           </div>
-          <div className="queue-indicator"><span /> Live booking queue</div>
+          <div className="admin-heading-actions">
+            <Link className="view-button" href="/admin/additional-enquiries">Additional service enquiries</Link>
+            <div className="queue-indicator"><span /> Live booking queue</div>
+          </div>
         </section>
 
         {error && (

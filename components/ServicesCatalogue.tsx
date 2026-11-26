@@ -5,6 +5,7 @@ import { bags, kitPackages, services } from "@/lib/data";
 import { PackageCard } from "./PackageCard";
 import { ProductCard } from "./ProductCard";
 import { ServicesCart } from "./ServicesCart";
+import { AdditionalServices } from "./AdditionalServices";
 
 const categoryGroups=[
   {id:"cricket-gear",title:"Cricket Gear",items:services.filter(item=>["pads","sports-gloves","keeper-gloves"].includes(item.id))},
@@ -47,6 +48,7 @@ export function ServicesCatalogue() {
       </section>
 
       <p className="launch-enquiry-note">KitKleen is coming soon to Hyderabad. Send an enquiry to discuss services and launch timing; bookings are not yet operational.</p>
+      <AdditionalServices/>
     </div>
     <ServicesCart/>
   </div>;
