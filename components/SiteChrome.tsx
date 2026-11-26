@@ -12,7 +12,7 @@ export function SiteHeader() {
   const path = usePathname();
   const {count} = useCart();
   const [open,setOpen] = useState(false);
-  if(path==="/admin"||path.startsWith("/admin/bookings/")||path.startsWith("/admin/additional-enquiries")) return null;
+  if(path==="/admin"||path.startsWith("/admin/bookings/")||path.startsWith("/admin/additional-enquiries")||path.startsWith("/admin/membership-enquiries")) return null;
   return <>
     <header className="header"><div className="shell header-inner">
       <Link href="/" className="brand-link" onClick={()=>setOpen(false)}>
@@ -33,7 +33,7 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   const path = usePathname();
-  if(path.startsWith("/admin/additional-enquiries")) return null;
+  if(path.startsWith("/admin/additional-enquiries")||path.startsWith("/admin/membership-enquiries")) return null;
   return <footer className="footer">
     <div className="shell footer-grid">
       <div className="footer-brand">
