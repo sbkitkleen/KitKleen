@@ -5,6 +5,12 @@ import {
   calculateJerseyAdjustment,
   parseAdditionalEnquiry,
 } from "../lib/additionalServiceEnquiries.ts";
+import {
+  InvalidBookingRequestError,
+  parsePublicBookingSubmission,
+  readBoundedJsonRequest,
+  RequestBodyTooLargeError,
+} from "../lib/bookingSubmission.ts";
 
 function createForm(serviceCategory, fields = {}) {
   const form = new FormData();
@@ -89,4 +95,92 @@ test("every additional service has its own supported category", () => {
     "leather-balls",
     "jerseys",
   ]);
+});
+
+test("booking submission recalculates package prices and totals from the server catalogue", () => {
+  const result = parsePublicBookingSubmission({
+    mode: "package",
+    customer: {
+      name: "Asha Customer",
+      mobile: "9876543210",
+      email: "asha@example.com",
+      location: "Bengaluru",
+      date: "2026-12-01",
+      notes: null,
+    },
+    items: [{
+      kind: "package",
+      packageId: "batting-kit",
+      careLevelId: "fresh",
+      quantity: 1,
+    }],
+  });
+  assert.equal(result.booking.estimated_total, 299);
+  assert.equal(result.booking.service_type, "Cricket Kit · KITKLEEN Fresh");
+  assert.equal(result.items[0].unit_price, 299);
+  assert.equal(result.items[0].total_price, 299);
+});
+
+test("booking submission rejects forged prices, invalid dates, and incompatible booking modes", () => {
+  const valid = {
+    mode: "package",
+    customer: {
+      name: "Asha Customer",
+      mobile: "9876543210",
+      email: null,
+      location: "Bengaluru",
+      date: "2026-12-01",
+      notes: null,
+    },
+    items: [{
+      kind: "package",
+      packageId: "batting-kit",
+      careLevelId: "fresh",
+      quantity: 1,
+    }],
+  };
+  assert.throws(
+    () => parsePublicBookingSubmission({
+      ...valid,
+      customer: { ...valid.customer, date: "2026-02-30" },
+    }),
+    InvalidBookingRequestError
+  );
+  assert.throws(
+    () => parsePublicBookingSubmission({
+      ...valid,
+      customer: { ...valid.customer, date: "2000-01-01" },
+    }),
+    InvalidBookingRequestError
+  );
+  assert.throws(
+    () => parsePublicBookingSubmission({
+      ...valid,
+      items: [{ ...valid.items[0], unit_price: 1 }],
+    }),
+    InvalidBookingRequestError
+  );
+  assert.throws(
+    () => parsePublicBookingSubmission({
+      ...valid,
+      items: [{ ...valid.items[0], quantity: 2 }],
+    }),
+    InvalidBookingRequestError
+  );
+});
+
+test("booking JSON request reader rejects malformed and oversized streamed bodies", async () => {
+  const request = (body) => new Request("https://kitkleen.test/api/bookings", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body,
+  });
+  await assert.rejects(
+    readBoundedJsonRequest(request('{"booking":'), 1024),
+    InvalidBookingRequestError
+  );
+  await assert.rejects(
+    readBoundedJsonRequest(request("x".repeat(33)), 32),
+    RequestBodyTooLargeError
+  );
 });

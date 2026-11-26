@@ -238,12 +238,103 @@ test("booking grants cover the current customer and Admin query paths", async ()
     "utf8"
   );
 
-  assert.match(bookingForm, /\.from\("bookings"\)[\s\S]*?\.insert\(\{/);
-  assert.match(bookingForm, /\.from\("booking_items"\)[\s\S]*?\.insert\(bookingItems\)/);
+  assert.match(bookingForm, /fetch\("\/api\/bookings"/);
+  assert.doesNotMatch(bookingForm, /\.from\("(?:bookings|booking_items)"\)\s*\.insert\(/);
+  assert.doesNotMatch(bookingForm, /SUPABASE_SERVICE_ROLE_KEY|createAdminClient/);
   assert.match(dashboard, /\.from\("bookings"\)[\s\S]*?\.select\("\*"\)/);
   assert.match(detail, /\.from\("bookings"\)[\s\S]*?\.select\("id,customer_name,mobile,email,location,service_type,preferred_date,notes,estimated_total,status,created_at"\)/);
   assert.match(detail, /\.from\("booking_items"\)[\s\S]*?\.select\("item_name,quantity,unit_price,total_price"\)/);
   assert.match(detail, /\.update\(\{status:nextStatus\}\)[\s\S]*?\.select\("id,status"\)/);
+});
+
+test("public booking RPC is atomic, validates totals, and forces the initial status", async () => {
+  const migration = await readFile(
+    new URL("../supabase/migrations/20261126090000_harden_public_booking_submissions.sql", import.meta.url),
+    "utf8"
+  );
+  const submission = migration.match(
+    /create or replace function public\.submit_public_booking[\s\S]*?\n\$\$;/i
+  )?.[0];
+  assert.ok(submission);
+  assert.match(migration, /revoke insert on table public\.bookings, public\.booking_items from public, anon/i);
+  assert.match(submission, /auth\.role\(\) is distinct from 'service_role'/i);
+  assert.match(submission, /'new'\s*\);/i);
+  assert.match(submission, /v_items_total <> v_estimated_total/i);
+  assert.match(submission, /v_line_total::bigint <> v_quantity::bigint \* v_unit_price::bigint/i);
+  assert.match(submission, /insert into public\.booking_items[\s\S]*v_booking_id/i);
+  assert.match(migration, /grant execute on function public\.submit_public_booking\(jsonb, jsonb\) to service_role/i);
+  assert.match(migration, /alter function public\.submit_public_booking\(jsonb, jsonb\) owner to postgres/i);
+  assert.match(migration, /return v_request_count <= 12/i);
+  assert.match(migration, /create table if not exists public\.booking_submission_rate_limits/i);
+  assert.match(migration, /revoke all on function public\.consume_public_booking_rate_limit\(text\)[\s\S]*?from public, anon, authenticated, service_role[\s\S]*?grant execute on function public\.consume_public_booking_rate_limit\(text\) to service_role/i);
+});
+
+test("booking API enforces same-origin requests and uses server-side canonical pricing", async () => {
+  const [route, helper] = await Promise.all([
+    readFile(new URL("../app/api/bookings/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/bookingSubmission.ts", import.meta.url), "utf8"),
+  ]);
+  assert.match(route, /isSameOriginRequest\(request\)/);
+  assert.match(route, /const supabase = createAdminClient\(\)/);
+  assert.match(route, /supabase\.rpc\(\s*"submit_public_booking"/);
+  assert.match(route, /hashTrustedClientIp/);
+  assert.match(route, /consume_public_booking_rate_limit/);
+  assert.match(route, /Retry-After.*3600/);
+  assert.match(route, /SUPABASE_SERVICE_ROLE_KEY/);
+  assert.match(route, /readBoundedJsonRequest/);
+  assert.match(helper, /product\.prices\[careLevelId\]/);
+  assert.match(helper, /kit\.prices\[careLevelId\]/);
+  assert.match(helper, /unit_price: unitPrice/);
+});
+
+test("Admin routes and pages require a verified app_metadata admin role", async () => {
+  const [dashboard, detail, enquiriesPage, updateRoute, paymentRoute] = await Promise.all([
+    readFile(new URL("../app/admin/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/admin/bookings/[id]/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/admin/additional-enquiries/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/admin/additional-service-enquiries/[id]/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/admin/additional-service-enquiries/[id]/payments/route.ts", import.meta.url), "utf8"),
+  ]);
+  for (const source of [dashboard, detail, enquiriesPage, updateRoute, paymentRoute]) {
+    assert.match(source, /app_metadata(?:\?\.|\.)role\s*!==?\s*["']admin["']/);
+    assert.match(source, /auth\.getUser\(\)/);
+    assert.doesNotMatch(source, /user_metadata/);
+  }
+});
+
+test("public enquiry submission preserves size, origin, rate-limit, and idempotency controls", async () => {
+  const route = await readFile(
+    new URL("../app/api/additional-service-enquiries/route.ts", import.meta.url),
+    "utf8"
+  );
+  assert.match(route, /isSameOriginRequest\(request\)/);
+  assert.match(route, /consume_additional_service_enquiry_rate_limit/);
+  assert.match(route, /begin_additional_service_enquiry_submission/);
+  assert.match(route, /complete_additional_service_enquiry_submission/);
+  assert.match(route, /hasValidImageSignature/);
+  assert.match(route, /SUPABASE_SERVICE_ROLE_KEY/);
+});
+
+test("service-role RPCs remain restricted and never gain public execution grants", async () => {
+  const [enquiryMigration, bookingMigration] = await Promise.all([
+    readFile(migrationUrl, "utf8"),
+    readFile(new URL("../supabase/migrations/20261126090000_harden_public_booking_submissions.sql", import.meta.url), "utf8"),
+  ]);
+  assert.match(enquiryMigration, /revoke all on function public\.consume_additional_service_enquiry_rate_limit\(text\)[\s\S]*?from public, anon, authenticated, service_role[\s\S]*?grant execute on function public\.consume_additional_service_enquiry_rate_limit\(text\)\s+to service_role/i);
+  assert.match(enquiryMigration, /revoke all on function public\.complete_additional_service_enquiry_submission\([\s\S]*?\) from public, anon, authenticated, service_role[\s\S]*?to service_role/i);
+  assert.match(enquiryMigration, /auth\.role\(\) is distinct from 'service_role'/i);
+  assert.match(bookingMigration, /revoke all on function public\.submit_public_booking\(jsonb, jsonb\)[\s\S]*?from public, anon, authenticated, service_role[\s\S]*?grant execute on function public\.submit_public_booking\(jsonb, jsonb\) to service_role/i);
+  assert.doesNotMatch(bookingMigration, /grant execute on function public\.submit_public_booking\(jsonb, jsonb\) to anon/i);
+});
+
+test("application config enables production security response headers", async () => {
+  const config = await readFile(new URL("../next.config.ts", import.meta.url), "utf8");
+  assert.match(config, /X-Content-Type-Options/);
+  assert.match(config, /X-Frame-Options/);
+  assert.match(config, /Referrer-Policy/);
+  assert.match(config, /Permissions-Policy/);
+  assert.match(config, /Strict-Transport-Security/);
+  assert.match(config, /NODE_ENV === "production"/);
 });
 
 test("additional-service storage setup does not overwrite existing bucket configuration", async () => {

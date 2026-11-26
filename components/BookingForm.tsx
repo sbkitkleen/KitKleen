@@ -4,7 +4,6 @@ import Link from "next/link";
 import {useState} from "react";
 import {bags,careLevels,packages,services,type CareLevelId} from "@/lib/data";
 import {useCart} from "@/components/CartContext";
-import { supabase } from "@/lib/supabase";
 import {FaCalendarDays,FaCheck,FaMinus,FaPlus,FaWhatsapp} from "react-icons/fa6";
 
 type ServiceType=(typeof packages)[number]["id"]|"individual"|"";
@@ -133,84 +132,47 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
   }
 
   try {
-    const bookingId = crypto.randomUUID();
-
-    // 1. Save the main booking
-    const { error: bookingError } = await supabase
-      .from("bookings")
-      .insert({
-        id: bookingId,
-        customer_name: customer.name,
-        mobile: customer.mobile,
-        email: customer.email || null,
-        location: customer.location,
-        service_type: serviceName,
-        preferred_date: customer.date,
-        notes: customer.notes || null,
-        estimated_total: total,
-        status: "new",
-      });
-
-    if (bookingError) {
-  setError(
-    `Booking failed: ${bookingError.message || "Unknown error"}${
-      bookingError.code ? ` (Code: ${bookingError.code})` : ""
-    }`
-  );
-  return;
-}
-
-    // 2. Prepare booking items
-    type BookingItemInsert = {
-  booking_id: string;
-  item_name: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-    };
-    const bookingItems: BookingItemInsert[] = fromCart
-      ? selectedCartItems.map(item=>({
-          booking_id:bookingId,
-          item_name:`${item.name} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}${item.kind==="package"?` (Includes: ${item.includes.join(", ")})`:""}`,
-          quantity:item.qty,
-          unit_price:item.price,
-          total_price:item.price*item.qty,
-        }))
+    const bookingItems = fromCart
+      ? selectedCartItems.map(item=>item.kind==="package"
+        ?{kind:"package",packageId:item.packageId,careLevelId:item.careLevelId,quantity:item.qty}
+        :{kind:"gear",productId:item.productId,careLevelId:item.careLevelId,quantity:item.qty})
       : selectedPackage
-        ? [
-          {
-            booking_id: bookingId,
-            item_name: `${selectedPackage.name} · ${selectedPackage.careLevelName} (Includes: ${selectedPackage.includes.join(", ")})`,
-            quantity: 1,
-            unit_price: selectedPackage.price,
-            total_price: selectedPackage.price,
-          },
-        ]
+        ? [{kind:"package",packageId:selectedPackage.kitId,careLevelId:selectedPackage.careLevelId,quantity:1}]
         : selectedGear.map((item) => {
-          const quantity = item.quantity;
           return {
-            booking_id: bookingId,
-            item_name: `${item.displayName} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}`,
-            quantity,
-            unit_price: item.price,
-            total_price: item.price * quantity,
+            kind:"gear",
+            productId:item.id,
+            careLevelId:item.careLevelId,
+            quantity:item.quantity,
           };
         });
 
-    // 3. Save individual booking items
-    const { error: itemsError } = await supabase
-      .from("booking_items")
-      .insert(bookingItems);
-
-    if (itemsError) {
-      console.error("Booking items error:", itemsError);
-      setError(
-        "Your booking was created, but we couldn't save the selected items. Please contact us."
-      );
+    const response = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: fromCart ? "cart" : selectedPackage ? "package" : "individual",
+        customer: {
+          name: customer.name,
+          mobile: customer.mobile,
+          email: customer.email || null,
+          location: customer.location,
+          date: customer.date,
+          notes: customer.notes || null,
+        },
+        items: bookingItems,
+      }),
+    });
+    if (!response.ok) {
+      const result: unknown = await response.json().catch(() => null);
+      const message = result && typeof result === "object" && "error" in result &&
+        typeof result.error === "string"
+        ? result.error
+        : "Your booking could not be submitted. Please try again.";
+      setError(message);
       return;
     }
 
-    // 4. Show success screen
     setSubmitted(true);
   } catch (error) {
     console.error("Unexpected booking error:", error);
