@@ -276,9 +276,9 @@ test("booking API enforces same-origin requests and uses server-side canonical p
   ]);
   assert.match(route, /isSameOriginRequest\(request\)/);
   assert.match(route, /const supabase = createAdminClient\(\)/);
-  assert.match(route, /supabase\.rpc\(\s*"submit_public_booking"/);
+  assert.match(route, /supabase\.rpc\(\s*"submit_public_booking_idempotent"/);
   assert.match(route, /hashTrustedClientIp/);
-  assert.match(route, /consume_public_booking_rate_limit/);
+  assert.match(route, /p_ip_hash: ipHash/);
   assert.match(route, /Retry-After.*3600/);
   assert.match(route, /SUPABASE_SERVICE_ROLE_KEY/);
   assert.match(route, /readBoundedJsonRequest/);

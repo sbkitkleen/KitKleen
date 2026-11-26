@@ -1,9 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import {useState} from "react";
+import {useRef,useState} from "react";
 import {bags,careLevels,packages,services,type CareLevelId} from "@/lib/data";
 import {useCart} from "@/components/CartContext";
+import {
+  beginBookingSubmission,
+  completeBookingSubmission,
+  createBookingSubmissionState,
+  finishBookingSubmission,
+} from "@/lib/bookingSubmissionIdempotency";
 import {FaCalendarDays,FaCheck,FaMinus,FaPlus,FaWhatsapp} from "react-icons/fa6";
 
 type ServiceType=(typeof packages)[number]["id"]|"individual"|"";
@@ -40,6 +46,8 @@ export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:(ty
   const [customer,setCustomer]=useState<CustomerDetails>({name:"",mobile:"",email:"",location:"",date:"",notes:""});
   const [error,setError]=useState("");
   const [submitted,setSubmitted]=useState(false);
+  const [isSubmitting,setIsSubmitting]=useState(false);
+  const submissionState=useRef(createBookingSubmissionState());
   const effectiveServiceType=fromCart?"cart":serviceType;
   const selectedPackage=packages.find(item=>item.id===effectiveServiceType);
   const selectedCartItems=fromCart?cartItems:[];
@@ -109,6 +117,7 @@ export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:(ty
 
 async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
+  if(submissionState.current.inProgress)return;
   setError("");
 
   if (fromCart && !selectedCartItems.length) {
@@ -131,37 +140,44 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
     return;
   }
 
-  try {
-    const bookingItems = fromCart
+  const body={
+    mode: fromCart ? "cart" : selectedPackage ? "package" : "individual",
+    customer: {
+      name: customer.name,
+      mobile: customer.mobile,
+      email: customer.email || null,
+      location: customer.location,
+      date: customer.date,
+      notes: customer.notes || null,
+    },
+    items: fromCart
       ? selectedCartItems.map(item=>item.kind==="package"
         ?{kind:"package",packageId:item.packageId,careLevelId:item.careLevelId,quantity:item.qty}
         :{kind:"gear",productId:item.productId,careLevelId:item.careLevelId,quantity:item.qty})
       : selectedPackage
         ? [{kind:"package",packageId:selectedPackage.kitId,careLevelId:selectedPackage.careLevelId,quantity:1}]
-        : selectedGear.map((item) => {
-          return {
-            kind:"gear",
-            productId:item.id,
-            careLevelId:item.careLevelId,
-            quantity:item.quantity,
-          };
-        });
+        : selectedGear.map((item) => ({
+          kind:"gear",
+          productId:item.id,
+          careLevelId:item.careLevelId,
+          quantity:item.quantity,
+        })),
+  };
+  const idempotencyKey=beginBookingSubmission(
+    submissionState.current,
+    JSON.stringify(body)
+  );
+  if(!idempotencyKey)return;
+  setIsSubmitting(true);
 
+  try {
     const response = await fetch("/api/bookings", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mode: fromCart ? "cart" : selectedPackage ? "package" : "individual",
-        customer: {
-          name: customer.name,
-          mobile: customer.mobile,
-          email: customer.email || null,
-          location: customer.location,
-          date: customer.date,
-          notes: customer.notes || null,
-        },
-        items: bookingItems,
-      }),
+      headers: {
+        "Content-Type": "application/json",
+        "Idempotency-Key": idempotencyKey,
+      },
+      body: JSON.stringify(body),
     });
     if (!response.ok) {
       const result: unknown = await response.json().catch(() => null);
@@ -173,10 +189,14 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
       return;
     }
 
+    completeBookingSubmission(submissionState.current);
     setSubmitted(true);
   } catch (error) {
     console.error("Unexpected booking error:", error);
     setError("Something went wrong. Please try again.");
+  } finally {
+    finishBookingSubmission(submissionState.current);
+    setIsSubmitting(false);
   }
 }
 
@@ -249,7 +269,9 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
           </div>
         </section>
         {error&&<p className="booking-error" role="alert">{error}</p>}
-        <button className="btn btn-primary booking-submit" type="submit">Send Care Enquiry <span aria-hidden="true">→</span></button>
+        <button className="btn btn-primary booking-submit" type="submit" disabled={isSubmitting}>
+          {isSubmitting?"Sending...":"Send Care Enquiry"} <span aria-hidden="true">→</span>
+        </button>
       </form>}
     </div>
 
