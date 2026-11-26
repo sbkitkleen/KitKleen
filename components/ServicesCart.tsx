@@ -42,7 +42,7 @@ function CartContents({onContinue}:{onContinue?:()=>void}) {
       ?<div className="services-cart-empty">
         <span aria-hidden="true">▢</span>
         <strong>Your request is empty</strong>
-        <p>Choose a service and care level to start your enquiry.</p>
+        <p>Add cleaning, repairs, cricket balls or jerseys to start your enquiry.</p>
         <a href="#individual-gear" onClick={onContinue}>Browse services</a>
       </div>
       :<>

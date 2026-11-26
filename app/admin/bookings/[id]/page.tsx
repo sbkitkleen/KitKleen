@@ -79,6 +79,7 @@ export default function BookingDetailPage({params}:{params:Promise<{id:string}>}
         const {data:{user},error:authError}=await supabase.auth.getUser();
         if(authError)throw authError;
         if(!user){router.replace("/admin/login");return;}
+        if(user.app_metadata?.role!=="admin"){router.replace("/admin/login");return;}
         if(!uuidPattern.test(id)){setNotFound(true);return;}
 
         const {data:bookingData,error:bookingError}=await supabase
