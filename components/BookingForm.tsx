@@ -1,10 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import {useState} from "react";
+import {useRef,useState} from "react";
 import {bags,careLevels,packages,services,type CareLevelId} from "@/lib/data";
 import {useCart} from "@/components/CartContext";
-import { supabase } from "@/lib/supabase";
+import {
+  beginBookingSubmission,
+  completeBookingSubmission,
+  createBookingSubmissionState,
+  finishBookingSubmission,
+} from "@/lib/bookingSubmissionIdempotency";
 import {FaCalendarDays,FaCheck,FaMinus,FaPlus,FaWhatsapp} from "react-icons/fa6";
 
 type ServiceType=(typeof packages)[number]["id"]|"individual"|"";
@@ -41,6 +46,8 @@ export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:(ty
   const [customer,setCustomer]=useState<CustomerDetails>({name:"",mobile:"",email:"",location:"",date:"",notes:""});
   const [error,setError]=useState("");
   const [submitted,setSubmitted]=useState(false);
+  const [isSubmitting,setIsSubmitting]=useState(false);
+  const submissionState=useRef(createBookingSubmissionState());
   const effectiveServiceType=fromCart?"cart":serviceType;
   const selectedPackage=packages.find(item=>item.id===effectiveServiceType);
   const selectedCartItems=fromCart?cartItems:[];
@@ -110,6 +117,7 @@ export function BookingForm({initialPackage,fromCart=false}:{initialPackage?:(ty
 
 async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
+  if(submissionState.current.inProgress)return;
   setError("");
 
   if (fromCart && !selectedCartItems.length) {
@@ -132,89 +140,63 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
     return;
   }
 
-  try {
-    const bookingId = crypto.randomUUID();
-
-    // 1. Save the main booking
-    const { error: bookingError } = await supabase
-      .from("bookings")
-      .insert({
-        id: bookingId,
-        customer_name: customer.name,
-        mobile: customer.mobile,
-        email: customer.email || null,
-        location: customer.location,
-        service_type: serviceName,
-        preferred_date: customer.date,
-        notes: customer.notes || null,
-        estimated_total: total,
-        status: "new",
-      });
-
-    if (bookingError) {
-  setError(
-    `Booking failed: ${bookingError.message || "Unknown error"}${
-      bookingError.code ? ` (Code: ${bookingError.code})` : ""
-    }`
-  );
-  return;
-}
-
-    // 2. Prepare booking items
-    type BookingItemInsert = {
-  booking_id: string;
-  item_name: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-    };
-    const bookingItems: BookingItemInsert[] = fromCart
-      ? selectedCartItems.map(item=>({
-          booking_id:bookingId,
-          item_name:`${item.name} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}${item.kind==="package"?` (Includes: ${item.includes.join(", ")})`:""}`,
-          quantity:item.qty,
-          unit_price:item.price,
-          total_price:item.price*item.qty,
-        }))
+  const body={
+    mode: fromCart ? "cart" : selectedPackage ? "package" : "individual",
+    customer: {
+      name: customer.name,
+      mobile: customer.mobile,
+      email: customer.email || null,
+      location: customer.location,
+      date: customer.date,
+      notes: customer.notes || null,
+    },
+    items: fromCart
+      ? selectedCartItems.map(item=>item.kind==="package"
+        ?{kind:"package",packageId:item.packageId,careLevelId:item.careLevelId,quantity:item.qty}
+        :{kind:"gear",productId:item.productId,careLevelId:item.careLevelId,quantity:item.qty})
       : selectedPackage
-        ? [
-          {
-            booking_id: bookingId,
-            item_name: `${selectedPackage.name} · ${selectedPackage.careLevelName} (Includes: ${selectedPackage.includes.join(", ")})`,
-            quantity: 1,
-            unit_price: selectedPackage.price,
-            total_price: selectedPackage.price,
-          },
-        ]
-        : selectedGear.map((item) => {
-          const quantity = item.quantity;
-          return {
-            booking_id: bookingId,
-            item_name: `${item.displayName} · ${careLevels.find(level=>level.id===item.careLevelId)?.name}`,
-            quantity,
-            unit_price: item.price,
-            total_price: item.price * quantity,
-          };
-        });
+        ? [{kind:"package",packageId:selectedPackage.kitId,careLevelId:selectedPackage.careLevelId,quantity:1}]
+        : selectedGear.map((item) => ({
+          kind:"gear",
+          productId:item.id,
+          careLevelId:item.careLevelId,
+          quantity:item.quantity,
+        })),
+  };
+  const idempotencyKey=beginBookingSubmission(
+    submissionState.current,
+    JSON.stringify(body)
+  );
+  if(!idempotencyKey)return;
+  setIsSubmitting(true);
 
-    // 3. Save individual booking items
-    const { error: itemsError } = await supabase
-      .from("booking_items")
-      .insert(bookingItems);
-
-    if (itemsError) {
-      console.error("Booking items error:", itemsError);
-      setError(
-        "Your booking was created, but we couldn't save the selected items. Please contact us."
-      );
+  try {
+    const response = await fetch("/api/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Idempotency-Key": idempotencyKey,
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      const result: unknown = await response.json().catch(() => null);
+      const message = result && typeof result === "object" && "error" in result &&
+        typeof result.error === "string"
+        ? result.error
+        : "Your booking could not be submitted. Please try again.";
+      setError(message);
       return;
     }
 
-    // 4. Show success screen
+    completeBookingSubmission(submissionState.current);
     setSubmitted(true);
   } catch (error) {
     console.error("Unexpected booking error:", error);
     setError("Something went wrong. Please try again.");
+  } finally {
+    finishBookingSubmission(submissionState.current);
+    setIsSubmitting(false);
   }
 }
 
@@ -287,7 +269,9 @@ async function submitBooking(event: React.FormEvent<HTMLFormElement>) {
           </div>
         </section>
         {error&&<p className="booking-error" role="alert">{error}</p>}
-        <button className="btn btn-primary booking-submit" type="submit">Send Care Enquiry <span aria-hidden="true">→</span></button>
+        <button className="btn btn-primary booking-submit" type="submit" disabled={isSubmitting}>
+          {isSubmitting?"Sending...":"Send Care Enquiry"} <span aria-hidden="true">→</span>
+        </button>
       </form>}
     </div>
 
